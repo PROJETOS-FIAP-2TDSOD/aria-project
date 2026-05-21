@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">ARIA</string>
+    <string name="app_tagline">Inovação que transforma</string>
+
+    <!-- Generic Actions -->
+    <string name="action_back">Voltar</string>
+    <string name="action_save">Salvar</string>
+    <string name="action_delete">Excluir</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_retry">Tentar novamente</string>
+    <string name="action_refresh">Atualizar</string>
+    <string name="action_logout">Sair</string>
+    <string name="action_create">Criar</string>
+    <string name="action_submit">Enviar</string>
+    <string name="action_next">Próximo</string>
+    <string name="action_previous">Anterior</string>
+    <string name="action_filter_all">Todos</string>
+    <string name="action_mark_all_read">Marcar todas como lidas</string>
+    <string name="action_approve">Aprovar</string>
+    <string name="action_reject">Rejeitar</string>
+    <string name="action_review">Revisar</string>
+    <string name="action_see_all">Ver todas</string>
+    <string name="action_export">Exportar</string>
+
+    <!-- Generic Labels -->
+    <string name="label_loading">Carregando…</string>
+    <string name="label_required_field">* Campo obrigatório</string>
+    <string name="label_score">Pontuação</string>
+    <string name="label_status">Status</string>
+    <string name="label_category">Categoria</string>
+    <string name="label_description">Descrição</string>
+    <string name="label_manager">Gestor</string>
+    <string name="label_author">Autor</string>
+    <string name="label_department">Departamento</string>
+    <string name="label_email">E-mail</string>
+    <string name="label_profile">Perfil</string>
+    <string name="label_date_start">Início</string>
+    <string name="label_date_end_expected">Previsão de término</string>
+    <string name="label_progress">Progresso</string>
+    <string name="label_roi_estimated">ROI Estimado</string>
+    <string name="label_origin_idea">Ideia Origem</string>
+    <string name="label_dates">Datas</string>
+    <string name="label_details">Detalhes</string>
+    <string name="label_feedback">Feedback</string>
+    <string name="label_history">Histórico</string>
+    <string name="label_priority">Prioridade</string>
+    <string name="label_target_audience">Público-alvo</string>
+    <string name="label_expires_at">Expira em</string>
+    <string name="label_not_informed">Não informado</string>
+    <string name="label_by">Por</string>
+    <string name="label_problem">Problema</string>
+    <string name="label_benefits_expected">Benefícios esperados</string>
+    <string name="label_resources_required">Recursos necessários</string>
+    <string name="label_problem_solves">Problema que resolve</string>
+    <string name="label_score_low">Baixo</string>
+    <string name="label_score_medium">Médio</string>
+    <string name="label_score_high">Alto</string>
+    <string name="label_all_fem">Todas</string>
+    <string name="label_title">Título</string>
+    <string name="label_benefits">Benefícios</string>
+    <string name="label_resources">Recursos</string>
+
+    <!-- States -->
+    <string name="state_error_generic">Ocorreu um erro inesperado.</string>
+    <string name="state_error_load_failed">Falha ao carregar os dados.</string>
+    <string name="state_error_title">Algo deu errado</string>
+    <string name="state_empty_ideas_title">Nenhuma ideia</string>
+    <string name="state_empty_ideas_description">Suas ideias aparecerão aqui. Que tal submeter a primeira?</string>
+    <string name="state_empty_projects_title">Nenhum projeto</string>
+    <string name="state_empty_projects_description">Crie o primeiro projeto a partir de uma ideia aprovada.</string>
+    <string name="state_empty_notifications_title">Sem notificações</string>
+    <string name="state_empty_notifications_description">Você está em dia! Novas notificações aparecerão aqui.</string>
+    <string name="state_empty_orientations_title">Nenhuma orientação</string>
+    <string name="state_empty_orientations_description">Orientações estratégicas aparecerão aqui.</string>
+    <string name="state_empty_key_metrics">Nenhuma métrica-chave definida para esta orientação.</string>
+    <string name="state_empty_pending_title">Nenhuma ideia pendente</string>
+    <string name="state_empty_pending_description">Todas as ideias foram analisadas.</string>
+    <string name="state_empty_pending_gestor_description">Não há ideias aguardando análise no momento.</string>
+    <string name="state_empty_orientations_lider_description">Crie orientações estratégicas para guiar a equipe.</string>
+    <string name="state_section_empty_updates">Nenhuma atualização recente. Envie ou edite uma ideia para ver a atividade aqui.</string>
+    <string name="state_section_empty_ai_operador">Nenhuma sugestão da IA no momento. Envie ideias para liberar recomendações personalizadas.</string>
+    <string name="state_section_empty_ai_insights">Nenhum insight da IA disponível no momento.</string>
+    <string name="state_section_empty_orientations">Nenhuma orientação estratégica disponível agora.</string>
+    <string name="state_section_empty_top_projects">Nenhum projeto com dados de ROI ainda.</string>
+    <string name="state_section_empty_distribution">Ideias insuficientes para exibir a distribuição por categoria.</string>
+    <string name="state_section_empty_analyses_projects">Nenhum projeto para comparar neste período.</string>
+    <string name="state_section_empty_analyses_trends">Ideias insuficientes para exibir tendências por categoria.</string>
+    <string name="state_section_empty_analyses_emerging">Nenhuma tendência emergente identificada ainda.</string>
+    <string name="state_section_empty_analyses_ai">Nenhuma previsão da IA disponível ainda.</string>
+    <string name="state_section_empty_analyses_recommendations">Nenhuma recomendação no momento.</string>
+    <string name="state_section_empty_aligned_ideas">Nenhuma ideia alinhada a esta orientação ainda.</string>
+    <string name="state_section_empty_idea_ai_analysis">A análise da IA aparecerá aqui quando estiver disponível.</string>
+    <string name="state_section_empty_score_breakdown">Detalhamento da pontuação indisponível para esta ideia.</string>
+    <string name="state_section_empty_timeline">Nenhum evento na linha do tempo desta ideia ainda.</string>
+
+    <!-- Auth -->
+    <string name="auth_login_title">Entrar</string>
+    <string name="auth_login_subtitle">Acesse sua conta ARIA</string>
+    <string name="auth_email_label">E-mail</string>
+    <string name="auth_email_placeholder">seu@email.com</string>
+    <string name="auth_password_label">Senha</string>
+    <string name="auth_password_placeholder">••••••••</string>
+    <string name="auth_login_button">Entrar</string>
+    <string name="auth_forgot_password">Esqueci minha senha</string>
+    <string name="auth_recover_title">Recuperar Senha</string>
+    <string name="auth_recover_subtitle">Informe seu e-mail para receber as instruções</string>
+    <string name="auth_recover_button">Enviar instruções</string>
+    <string name="auth_recover_success_title">E-mail enviado!</string>
+    <string name="auth_recover_success_message">Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.</string>
+    <string name="auth_demo_credentials_title">Credenciais de demonstração</string>
+    <string name="auth_demo_password">Senha: aria123</string>
+    <string name="auth_show_password">Mostrar senha</string>
+    <string name="auth_hide_password">Ocultar senha</string>
+    <string name="auth_login_forgot_question">Esqueceu a senha?</string>
+    <string name="auth_recover_action">Recuperar</string>
+    <string name="auth_back_to_login">Voltar ao login</string>
+    <string name="auth_demo_header">DEMO · CREDENCIAIS DE ACESSO</string>
+    <string name="auth_demo_emails">operador@aria.com  ·  gestor@aria.com  ·  lider@aria.com</string>
+
+    <string name="auth_brand_subgroup">GRUPO ÁGUIA BRANCA</string>
+    <string name="auth_remember_password">Lembrar senha</string>
+    <string name="auth_login_forgot_link">Esqueceu a senha?</string>
+    <string name="auth_register_prompt">Novo por aqui? Comece pelo primeiro acesso.</string>
+    <string name="auth_register_title">Primeiro acesso</string>
+    <string name="auth_register_subtitle">Crie sua conta ARIA</string>
+    <string name="auth_name_label">Nome completo</string>
+    <string name="auth_name_placeholder">Seu nome</string>
+    <string name="auth_confirm_password_label">Confirmar senha</string>
+    <string name="auth_register_button">Cadastrar</string>
+    <string name="auth_already_have_account">Já tem conta? Entrar</string>
+    <string name="auth_footer_version">Aria · Versão %1$s</string>
+    <string name="auth_app_version">0.0.1</string>
+    <string name="auth_error_email_required">Informe seu e-mail.</string>
+    <string name="auth_error_password_required">Informe sua senha.</string>
+    <string name="auth_error_password_mismatch">As senhas não coincidem.</string>
+    <string name="auth_error_name_required">Informe seu nome.</string>
+    <string name="auth_error_password_short">Use pelo menos 4 caracteres na senha.</string>
+    <string name="auth_error_email_exists">Este e-mail já está cadastrado. Entre na conta ou use outro e-mail.</string>
+    <string name="auth_error_register_invalid">Não foi possível criar a conta. Verifique os campos e tente novamente.</string>
+    <string name="auth_error_invalid_credentials">E-mail ou senha inválidos.</string>
+    <string name="auth_error_invalid_email">Informe um e-mail válido.</string>
+
+    <!-- Splash -->
+    <string name="splash_tagline">Inovação Inteligente</string>
+
+    <!-- Nav Items -->
+    <string name="nav_home">Início</string>
+    <string name="nav_ideas">Ideias</string>
+    <string name="nav_notifications">Alertas</string>
+    <string name="nav_profile">Perfil</string>
+    <string name="nav_pending">Pendentes</string>
+    <string name="nav_projects">Projetos</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_orientations">Orientações</string>
+    <string name="nav_orientations_short">Orient.</string>
+    <string name="nav_analyses">Análises</string>
+    <string name="nav_trends">Tendências</string>
+
+    <!-- Top Bar Subtitles -->
+    <string name="subtitle_operador">Operador</string>
+    <string name="subtitle_gestor">Gestor</string>
+    <string name="subtitle_lider">Líder</string>
+
+    <!-- Greetings & Roles -->
+    <string name="greeting_good_morning">Bom dia, %1$s</string>
+    <string name="role_operator">OPERADOR</string>
+    <string name="role_manager_dept">GESTORA · %1$s</string>
+    <string name="role_director_eyebrow">%1$s · DIRETOR</string>
+
+    <!-- Months -->
+    <string name="month_jan">JAN</string>
+    <string name="month_feb">FEV</string>
+    <string name="month_mar">MAR</string>
+    <string name="month_apr">ABR</string>
+    <string name="month_may">MAI</string>
+    <string name="month_jun">JUN</string>
+    <string name="month_jul">JUL</string>
+    <string name="month_aug">AGO</string>
+    <string name="month_sep">SET</string>
+    <string name="month_oct">OUT</string>
+    <string name="month_nov">NOV</string>
+    <string name="month_dec">DEZ</string>
+    <string name="month_short_label">MÊS</string>
+    <string name="cd_select_month">Selecionar mês</string>
+    <string-array name="months_short">
+        <item>JAN</item>
+        <item>FEV</item>
+        <item>MAR</item>
+        <item>ABR</item>
+        <item>MAI</item>
+        <item>JUN</item>
+        <item>JUL</item>
+        <item>AGO</item>
+        <item>SET</item>
+        <item>OUT</item>
+        <item>NOV</item>
+        <item>DEZ</item>
+    </string-array>
+
+    <!-- Operador Home -->
+    <string name="operador_home_greeting">Olá, %1$s</string>
+    <string name="operador_home_panel_title">Painel de Inovação</string>
+    <string name="operador_home_metric_total">Total de Ideias</string>
+    <string name="operador_home_metric_analysis">Em Análise</string>
+    <string name="operador_home_metric_approved">Aprovadas</string>
+    <string name="operador_home_metric_in_project">Em Projeto</string>
+    <string name="operador_home_metric_awaiting_sub">%d aguardando análise</string>
+    <string name="gestor_home_metric_in_review_sub">%d em revisão</string>
+    <string name="gestor_home_metric_avg_wait">Tempo médio fila</string>
+    <string name="operador_home_orientations_title">Orientações Estratégicas</string>
+    <string name="operador_home_no_orientations">Nenhuma orientação disponível.</string>
+    <string name="operador_home_fab_description">Nova Ideia</string>
+    <string name="operador_home_updates_title">Últimas atualizações</string>
+    <string name="operador_home_idea_approved">Ideia aprovada</string>
+    <string name="operador_home_idea_analyzing_days">Em análise há 3 dias</string>
+    <string name="operador_home_idea_rejected">Ideia rejeitada</string>
+    <string name="operador_home_see_reason">VER MOTIVO</string>
+    <string name="operador_home_hours_ago">HÁ %1$d HORAS · %2$s</string>
+    <string name="operador_home_ai_suggestions">Sugestões da IA</string>
+    <string name="operador_home_ai_suggestions_sub">Baseado no histórico de ideias aprovadas</string>
+
+    <!-- Operador Ideas -->
+    <string name="ideas_screen_title">Minhas ideias</string>
+    <string name="ideas_new_button">Nova Ideia</string>
+    <string name="ideas_submitted_count">%1$d ideias submetidas</string>
+    <string name="my_ideas_empty_filter_title">Nenhuma ideia neste filtro</string>
+    <string name="my_ideas_empty_filter_sub">Tente outro filtro ou comece uma nova ideia.</string>
+    <string name="label_optional">Opcional</string>
+
+    <!-- Nova Ideia -->
+    <string name="new_idea_title">Nova Ideia</string>
+    <string name="new_idea_description_min_chars">Mínimo 50 caracteres</string>
+    <string name="new_idea_step_identification">Identificação</string>
+    <string name="new_idea_step_description">Descrição</string>
+    <string name="new_idea_step_detail">Detalhamento</string>
+    <string name="new_idea_step_review">Revisão</string>
+    <string name="new_idea_field_name">Nome da Ideia</string>
+    <string name="new_idea_field_name_placeholder">Ex: Rota Inteligente 2.0</string>
+    <string name="new_idea_field_category">Categoria</string>
+    <string name="new_idea_field_description">Descrição</string>
+    <string name="new_idea_field_description_placeholder">Descreva sua ideia em detalhes…</string>
+    <string name="new_idea_field_problem">Problema a Resolver</string>
+    <string name="new_idea_field_problem_placeholder">Qual problema esta ideia resolve?</string>
+    <string name="new_idea_field_benefits">Benefícios Esperados</string>
+    <string name="new_idea_field_resources">Recursos Necessários</string>
+    <string name="new_idea_review_title">Revisão da Ideia</string>
+    <string name="new_idea_submit">Enviar Ideia</string>
+    <string name="new_idea_error_required">Preencha todos os campos obrigatórios.</string>
+    <string name="new_idea_success">Ideia enviada com sucesso!</string>
+    <string name="new_idea_field_title">Título da Ideia</string>
+    <string name="new_idea_field_title_placeholder">Ex: Sistema de gamificação para motoristas</string>
+    <string name="new_idea_field_description_idea">Descrição da Ideia</string>
+    <string name="new_idea_field_description_idea_placeholder">Descreva sua ideia de forma clara e objetiva…</string>
+    <string name="new_idea_field_problem_resolves">Problema que resolve</string>
+    <string name="new_idea_field_problem_resolves_placeholder">Qual problema ou oportunidade esta ideia endereça?</string>
+    <string name="new_idea_field_benefits_placeholder">Quais os ganhos para a empresa? Quantifique se possível…</string>
+    <string name="new_idea_field_resources_placeholder">Tecnologia, equipe, investimento estimado…</string>
+    <string name="new_idea_review_instructions">Revise sua ideia antes de enviar</string>
+
+    <!-- Detalhes Ideia Tabs -->
+    <string name="idea_tab_info">INFO</string>
+    <string name="idea_tab_score">SCORE</string>
+    <string name="idea_tab_timeline">LINHA DO TEMPO</string>
+
+    <!-- Detalhes Ideia -->
+    <string name="idea_details_title">Detalhes da Ideia</string>
+    <string name="idea_details_score_label">Score IA</string>
+    <string name="idea_details_tab_details">Detalhes</string>
+    <string name="idea_details_tab_feedback">Feedback</string>
+    <string name="idea_details_tab_history">Histórico</string>
+    <string name="idea_details_section_description">DESCRIÇÃO</string>
+    <string name="idea_details_section_problem">PROBLEMA</string>
+    <string name="idea_details_section_benefits">BENEFÍCIOS</string>
+    <string name="idea_details_section_resources">RECURSOS</string>
+    <string name="idea_details_no_feedback">Nenhum feedback disponível ainda.</string>
+    <string name="idea_details_similar_title">Ideias Similares</string>
+    <string name="idea_details_manager_feedback_title">Avaliação do Gestor</string>
+    <string name="idea_details_waiting_analysis">Aguardando análise do gestor…</string>
+    <string name="history_idea_submitted">Ideia submetida</string>
+    <string name="history_analysis_started">Gestor iniciou análise</string>
+    <string name="history_idea_approved_event">Ideia aprovada</string>
+    <string name="history_idea_rejected_event">Ideia rejeitada</string>
+    <string name="history_project_started">Projeto iniciado</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Notificações</string>
+    <string name="notifications_unread_count">%1$d não lidas</string>
+    <string name="notifications_all_done">Tudo em dia</string>
+
+    <!-- Gamification / Badges -->
+    <string name="badge_first_idea_name">Primeira Ideia</string>
+    <string name="badge_first_idea_desc">Cadastrou sua primeira ideia</string>
+    <string name="badge_innovator_5_name">Inovador Bronze</string>
+    <string name="badge_innovator_5_desc">Cadastrou 5 ideias</string>
+    <string name="badge_approved_name">Ideia Aprovada</string>
+    <string name="badge_approved_desc">Teve uma ideia aprovada pelo gestor</string>
+    <string name="badge_high_scorer_name">Destaque</string>
+    <string name="badge_high_scorer_desc">Recebeu score acima de 80 pontos</string>
+    <string name="badge_project_name">Gerador de Projetos</string>
+    <string name="badge_project_desc">Sua ideia virou um projeto</string>
+    <string name="badge_unlock_title">Conquista desbloqueada</string>
+    <string name="badge_unlock_heading">Nova badge</string>
+    <string name="badge_unlock_continue">Continuar</string>
+    <string name="profile_achievements_title">Conquistas</string>
+    <string name="profile_total_points">Total de Pontos</string>
+    <string name="profile_points_value">%1$d pts</string>
+    <string name="profile_badges_title">Badges</string>
+    <string name="profile_badges_progress">%1$d de %2$d badges conquistados</string>
+    <string name="home_your_performance">Seu Desempenho</string>
+    <string name="home_points_display">%1$d pontos</string>
+    <string name="home_badges_unlocked">%1$d de %2$d badges</string>
+
+    <!-- Perfil -->
+    <string name="profile_title">Perfil</string>
+    <string name="profile_metrics_title">Suas Métricas</string>
+    <string name="profile_info_title">Informações</string>
+    <string name="profile_statistics_title">Estatísticas</string>
+    <string name="profile_app_footer">ARIA v1.0.0 · GRUPO ÁGUIA BRANCA</string>
+    <string name="profile_logout">Sair da conta</string>
+    <string name="profile_stat_orientations_active">Orientações ativas</string>
+    <string name="profile_stat_ideas_reviewed">Ideias avaliadas</string>
+    <string name="profile_stat_projects_portfolio">Projetos no portfólio</string>
+    <string name="profile_stat_roi_managed">ROI gerenciado</string>
+    <string name="profile_stat_approval_rate">Taxa de aprovação</string>
+    <string name="profile_stat_total_ideas">Total de ideias</string>
+    <string name="profile_stat_in_analysis">Em análise</string>
+    <string name="profile_stat_projects_generated">Projetos gerados</string>
+    <string name="profile_stat_roi_attributed">ROI atribuído</string>
+    <string name="profile_director_strategy">DIRETOR · ESTRATÉGIA</string>
+    <string name="profile_operator_dept">OPERADOR · %1$s</string>
+    <string name="profile_manager_dept">GESTORA · %1$s</string>
+
+    <!-- Gestor Home -->
+    <string name="gestor_home_panel_title">Painel do Gestor</string>
+    <string name="gestor_home_metric_pending">Pendentes</string>
+    <string name="gestor_home_metric_approved">Aprovadas</string>
+    <string name="gestor_home_metric_active_projects">Em Projeto</string>
+    <string name="gestor_home_metric_completed">Concluídos</string>
+    <string name="gestor_home_pending_ideas">Ideias Pendentes</string>
+    <string name="gestor_home_active_projects">Projetos Ativos</string>
+    <string name="gestor_home_urgent_ideas">● Ideias urgentes</string>
+    <string name="gestor_home_urgent_sub">Aguardando análise há mais de 7 dias</string>
+    <string name="gestor_home_ai_insights">Insights da IA</string>
+
+    <!-- Pendentes -->
+    <string name="pending_screen_title">Ideias pendentes</string>
+    <string name="pending_waiting_count">%1$d aguardando análise</string>
+
+    <!-- Analisar Ideia -->
+    <string name="analyze_screen_title">Analisar ideia</string>
+    <string name="analyze_score_label">Pontuação (0–100)</string>
+    <string name="analyze_score_preview">Prévia do Score</string>
+    <string name="analyze_feedback_label">Feedback do Gestor</string>
+    <string name="analyze_feedback_placeholder">Escreva seu feedback sobre esta ideia…</string>
+    <string name="analyze_approve_button">Aprovar Ideia</string>
+    <string name="analyze_reject_button">Rejeitar Ideia</string>
+    <string name="analyze_error_score">Informe uma pontuação e feedback.</string>
+    <string name="analyze_section_description">DESCRIÇÃO</string>
+    <string name="analyze_section_problem">PROBLEMA</string>
+    <string name="analyze_section_benefits">BENEFÍCIOS</string>
+    <string name="analyze_feedback_for_collaborator">Feedback para o colaborador</string>
+    <string name="analyze_feedback_explain_placeholder">Explique sua decisão e dê orientações…</string>
+    <string name="analyze_idea_tab_info">INFO</string>
+    <string name="analyze_idea_tab_score">SCORE</string>
+    <string name="analyze_idea_tab_orient">ORIENTAÇÃO</string>
+    <string name="analyze_idea_action_reject">Rejeitar</string>
+    <string name="analyze_idea_action_more_info">Mais info</string>
+    <string name="analyze_idea_action_approve">Aprovar</string>
+    <string name="analyze_idea_approved_title">Ideia aprovada</string>
+    <string name="analyze_idea_approved_message">Deseja criar um projeto a partir desta ideia agora?</string>
+    <string name="analyze_idea_approved_create_project">Criar projeto</string>
+    <string name="action_later">Agora não</string>
+    <string name="analyze_idea_more_info_title">Informações adicionais</string>
+    <string name="analyze_section_resources">RECURSOS</string>
+
+    <!-- Projetos -->
+    <string name="projects_screen_title">Projetos</string>
+    <string name="projects_fab_description">Novo Projeto</string>
+    <string name="projects_summary">%1$d ativos · %2$s em ROI projetado</string>
+    <string name="projects_tab_all">Todos</string>
+    <string name="projects_tab_running">Em curso</string>
+    <string name="projects_tab_planning">Plano</string>
+    <string name="projects_empty_category_title">Sem projetos nesta categoria</string>
+    <string name="projects_empty_category_sub">Crie um novo projeto a partir de uma ideia aprovada.</string>
+    <string name="projects_new">Novo projeto</string>
+    <string name="projects_status_in_progress">EM ANDAMENTO</string>
+    <string name="projects_status_planning">PLANEJAMENTO</string>
+    <string name="projects_delivery_label">ENTREGA · %1$s</string>
+    <string name="projects_progress">PROGRESSO</string>
+    <string name="projects_roi_expected">ROI PREVISTO</string>
+    <string name="projects_roi_realized">ROI REALIZADO</string>
+
+    <!-- Criar Projeto -->
+    <string name="create_project_title">Criar Projeto</string>
+    <string name="create_project_field_name">Nome do Projeto</string>
+    <string name="create_project_field_name_placeholder">Ex: Rota Inteligente 2.0</string>
+    <string name="create_project_field_origin_idea">Ideia Origem</string>
+    <string name="create_project_field_origin_idea_hint">Selecione uma ideia</string>
+    <string name="create_project_field_description">Descrição do Projeto</string>
+    <string name="create_project_field_description_placeholder">Descreva o escopo e objetivos do projeto…</string>
+    <string name="create_project_button">Criar Projeto</string>
+    <string name="create_project_error_required">Preencha todos os campos obrigatórios.</string>
+
+    <!-- Detalhes Projeto -->
+    <string name="project_tab_overview">VISÃO</string>
+    <string name="project_tab_milestones">MARCOS</string>
+    <string name="project_tab_team">TIME</string>
+    <string name="project_hero_on_time">NO PRAZO</string>
+    <string name="project_hero_delivery">ENTREGA</string>
+    <string name="project_section_origin">ORIGEM</string>
+    <string name="project_roi_planned">Previsto</string>
+    <string name="project_roi_realized_label">Realizado</string>
+    <string name="project_details_title">Detalhes do Projeto</string>
+    <string name="project_details_section_description">DESCRIÇÃO</string>
+    <string name="project_details_section_dates">DATAS</string>
+    <string name="project_menu_more_options_cd">Mais opções</string>
+    <string name="project_update_section">Atualizar projeto</string>
+    <string name="project_update_progress">Progresso (%)</string>
+    <string name="project_update_roi">ROI realizado (K)</string>
+    <string name="project_update_status">Status</string>
+    <string name="project_update_saved">Alterações salvas com sucesso</string>
+    <string name="orientations_section_title">Orientações estratégicas</string>
+    <string name="analyses_open_trends_screen">Ver tendências detalhadas</string>
+    <string name="edit_orientation_title">Editar orientação</string>
+    <string name="edit_orientation_save">Salvar alterações</string>
+    <string name="delete_orientation_title">Excluir orientação?</string>
+    <string name="delete_orientation_message">Você está prestes a excluir \"%1$s\". Esta ação é irreversível e não pode ser desfeita.</string>
+    <string name="delete_orientation_confirm">Excluir permanentemente</string>
+    <string name="delete_project_title">Excluir projeto?</string>
+    <string name="delete_project_message">Você está prestes a excluir \"%1$s\". Esta ação é irreversível e não pode ser desfeita.</string>
+    <string name="delete_project_confirm">Excluir permanentemente</string>
+    <string name="delete_project_action">Excluir projeto</string>
+    <string name="project_edit_title">Editar projeto</string>
+    <string name="project_edit_subtitle">Edite todos os dados do projeto: os mesmos da criação, além de progresso e status.</string>
+    <string name="project_menu_share_summary">Compartilhar resumo</string>
+    <string name="project_menu_refresh">Atualizar</string>
+    <string name="project_menu_source_idea">Ver ideia de origem</string>
+    <string name="project_share_subject">ARIA — %1$s</string>
+    <string name="project_share_status_line">Status: %1$s</string>
+    <string name="project_share_progress_line">Progresso: %1$d%%</string>
+    <string name="project_share_period_line">Período: %1$s – %2$s</string>
+    <string name="project_share_roi_line">ROI previsto: %1$s · realizado: %2$s</string>
+    <string name="project_share_origin_line">Ideia de origem: %1$s · %2$s</string>
+    <string name="project_share_description_line">Descrição:\n%1$s</string>
+    <string name="project_share_no_description">(Sem descrição)</string>
+    <string name="project_menu_sheet_title">Opções do projeto</string>
+
+    <!-- Gestor Orientações -->
+    <string name="orientations_gestor_title">Orientações</string>
+
+    <!-- Gestor Perfil -->
+    <string name="gestor_profile_metric_total">Total</string>
+    <string name="gestor_profile_metric_active">Ativos</string>
+    <string name="gestor_profile_metric_completed">Concluídos</string>
+    <string name="gestor_profile_metrics_title">Métricas de Projetos</string>
+    <string name="gestor_profile_projects_under_mgmt">Projetos sob gestão</string>
+
+    <!-- Lider Dashboard -->
+    <string name="dashboard_title">DASHBOARD</string>
+    <string name="dashboard_overview_title">Visão Geral</string>
+    <string name="dashboard_eyebrow">%1$s · %2$s</string>
+    <string name="dashboard_period_month">Mês</string>
+    <string name="dashboard_period_quarter">Trimestre</string>
+    <string name="dashboard_period_year">Ano</string>
+    <string name="dashboard_roi_label">ROI MENSAL · %1$s/%2$s</string>
+    <string name="dashboard_metric_ideas_submitted">Ideias Submetidas</string>
+    <string name="dashboard_metric_approval_rate">Taxa Aprovação</string>
+    <string name="dashboard_metric_active_projects">Projetos Ativos</string>
+    <string name="dashboard_metric_conversion">Conversão</string>
+    <string name="dashboard_distribution_title">Distribuição por categoria</string>
+    <string name="dashboard_distribution_center_label">IDEIAS</string>
+    <string name="dashboard_delta_vs_previous">vs. %1$s</string>
+    <string name="dashboard_roi_accumulated_label">ROI TOTAL ACUMULADO</string>
+    <string name="dashboard_roi_in_month">ROI em %1$s</string>
+    <string name="dashboard_delta_vs_previous_month">vs. mês anterior</string>
+    <string name="dashboard_top_projects_title">Top projetos · ROI</string>
+    <string name="dashboard_top_projects_sub">ROI realizado em milhares (R$)</string>
+    <string name="dashboard_funnel_title">Funil de conversão</string>
+    <string name="dashboard_ai_insights_title">Insights da IA</string>
+    <string name="dashboard_funnel_submitted">Submetidas</string>
+    <string name="dashboard_funnel_approved">Aprovadas</string>
+    <string name="dashboard_funnel_in_project">Em projeto</string>
+    <string name="dashboard_funnel_completed">Concluídas</string>
+    <string name="dashboard_ai_forecast_eyebrow">PREVISÃO · PRÓXIMO TRIMESTRE</string>
+    <string name="dashboard_ai_emerging_eyebrow">TENDÊNCIA EMERGENTE</string>
+
+    <!-- Lider Orientações -->
+    <string name="orientations_lider_title">Orientações estratégicas</string>
+    <string name="orientations_lider_eyebrow">%1$d ATIVAS · %2$d IDEIAS ALINHADAS</string>
+    <string name="orientations_new_fab">Nova Orientação</string>
+    <string name="orientations_progress_label">PROGRESSO</string>
+    <string name="orientations_footer_ideas">%1$d ideias</string>
+    <string name="orientations_footer_projects">%1$d projetos</string>
+
+    <!-- Criar Orientação -->
+    <string name="create_orientation_title">Nova orientação</string>
+    <string name="create_orientation_assistant_title">Assistente de redação</string>
+    <string name="create_orientation_assistant_description">Gere texto-base com IA a partir de tópicos.</string>
+    <string name="create_orientation_assistant_action">GERAR</string>
+    <string name="create_orientation_assistant_generating">GERANDO…</string>
+    <string name="create_orientation_assistant_generated">✓ GERADO</string>
+    <string name="create_orientation_field_code">Código</string>
+    <string name="create_orientation_field_code_placeholder">#5</string>
+    <string name="create_orientation_field_title">Título</string>
+    <string name="create_orientation_field_title_placeholder">Ex: Inovação aberta com parceiros</string>
+    <string name="create_orientation_field_period">Período</string>
+    <string name="create_orientation_field_period_placeholder">Q3 2026 — Q2 2027</string>
+    <string name="create_orientation_field_objective">Objetivo</string>
+    <string name="create_orientation_field_objective_placeholder">Ex.: Reduzir em 25%% o consumo de combustível…</string>
+    <string name="create_orientation_field_objective_helper">Frase única que descreva o resultado esperado</string>
+    <string name="create_orientation_field_metrics">Métricas-chave</string>
+    <string name="create_orientation_field_metrics_helper">Adicione cada métrica com nome, valor atual e meta.</string>
+    <string name="create_orientation_metrics_empty_hint">Nenhuma métrica ainda. Toque em adicionar métrica para definir as metas desta orientação.</string>
+    <string name="create_orientation_metric_item_label">Métrica %1$d</string>
+    <string name="create_orientation_metric_name">Nome da métrica</string>
+    <string name="create_orientation_metric_name_placeholder">Ex: Ideias alinhadas</string>
+    <string name="create_orientation_metric_achieved">Atual</string>
+    <string name="create_orientation_metric_achieved_placeholder">12</string>
+    <string name="create_orientation_metric_target">Meta</string>
+    <string name="create_orientation_metric_target_placeholder">15</string>
+    <string name="create_orientation_add_metric">Adicionar métrica</string>
+    <string name="create_orientation_remove_metric_cd">Remover métrica</string>
+    <string name="create_orientation_expand_metric_cd">Expandir métrica</string>
+    <string name="create_orientation_collapse_metric_cd">Recolher métrica</string>
+    <string name="create_orientation_metrics_name_required">Informe o nome de cada métrica.</string>
+    <string name="create_orientation_field_visibility">Visibilidade</string>
+    <string name="create_orientation_field_visibility_value">Todos os perfis</string>
+    <string name="create_orientation_field_description">Descrição</string>
+    <string name="create_orientation_field_description_placeholder">Detalhe a orientação estratégica…</string>
+    <string name="create_orientation_field_category">Categoria</string>
+    <string name="create_orientation_field_priority">Prioridade</string>
+    <string name="create_orientation_button">Criar Orientação</string>
+    <string name="create_orientation_publish">Publicar orientação</string>
+    <string name="create_orientation_error_required">Informe o título da orientação.</string>
+
+    <!-- Detalhes Orientação -->
+    <string name="orientation_details_title">Orientação Estratégica</string>
+    <string name="orientation_details_section_description">DESCRIÇÃO</string>
+    <string name="orientation_details_section_info">DETALHES</string>
+    <string name="orientation_details_status_active">Ativa · 2026 Q2-Q4</string>
+    <string name="orientation_details_metric_ideas">Ideias</string>
+    <string name="orientation_details_metric_projects">Projetos</string>
+    <string name="orientation_details_metric_projects_active">ativos</string>
+    <string name="orientation_details_metric_roi">ROI</string>
+    <string name="orientation_details_aligned_ideas">Ideias alinhadas</string>
+    <string name="orientation_details_see_all">Ver todas</string>
+    <string name="orientation_details_key_metrics">Métricas-chave</string>
+    <string name="orientation_details_score_badge">Score %1$d</string>
+    <string name="orientation_created_by">Criado por %1$s · %2$s</string>
+    <string name="orientation_by_and_time">Por %1$s · %2$s</string>
+    <string name="orientation_not_found">Orientação não encontrada.</string>
+    <string name="project_not_found">Projeto não encontrado.</string>
+
+    <!-- Análises -->
+    <string name="analyses_screen_title">Análises</string>
+    <string name="analyses_overview_title">Resumo Geral</string>
+    <string name="analyses_metric_total">Total Ideias</string>
+    <string name="analyses_metric_avg_score">Pontuação Média</string>
+    <string name="analyses_by_status_title">Distribuição por Status</string>
+    <string name="analyses_by_category_title">Distribuição por Categoria</string>
+    <string name="analyses_export_action">Exportar</string>
+    <string name="analyses_tab_roi">ROI</string>
+    <string name="analyses_tab_trends">TENDÊNCIAS</string>
+    <string name="analyses_tab_ai">IA</string>
+    <string name="analyses_roi_total_label">ROI ACUMULADO · 2026</string>
+    <string name="analyses_drilldown_title">Drill-down · Projetos</string>
+    <string name="analyses_drilldown_subtitle">Top 5 projetos com maior retorno realizado</string>
+    <string name="analyses_quarter_variation">VARIAÇÃO TRIMESTRAL</string>
+    <string name="analyses_emerging_trends">Tendências emergentes</string>
+    <string name="analyses_emerging_trends_sub">Categorias com maior aceleração nos últimos 90 dias</string>
+    <string name="analyses_recommendations">Recomendações</string>
+    <string name="analyses_roi_chart_hint">Toque num mês para ver os valores.</string>
+    <string name="analyses_roi_bar_selected">%1$s · %2$s</string>
+    <string name="analyses_export_subject">Exportação ARIA — análises</string>
+    <string name="pdf_analytics_subtitle">Analytics · Inteligência em inovação</string>
+    <string name="pdf_analytics_generated">Gerado · %1$s</string>
+    <string name="pdf_analytics_continuation">Continuação</string>
+    <string name="pdf_analytics_focus_section">Secção em foco na app</string>
+    <string name="pdf_analytics_roi_total">ROI acumulado</string>
+    <string name="pdf_analytics_roi_delta">Variação vs. plano</string>
+    <string name="pdf_analytics_section_monthly">ROI mensal</string>
+    <string name="pdf_analytics_section_projects">Principais projetos (realizado / meta)</string>
+    <string name="pdf_analytics_section_trends">Tendências por categoria</string>
+    <string name="pdf_analytics_section_emerging">Temas emergentes</string>
+    <string name="pdf_analytics_section_ai_predictions">Perspetiva IA</string>
+    <string name="pdf_analytics_section_ai_recommendations">Recomendações</string>
+    <string name="pdf_analytics_footer_tagline">Aria — inovação estruturada para a sua operação</string>
+    <string name="export_pdf_error">Não foi possível criar o PDF. Tente novamente.</string>
+    <string name="export_chooser_title">Partilhar relatório</string>
+
+    <!-- Tendências -->
+    <string name="trends_screen_title">Tendências</string>
+    <string name="trends_metric_approval_rate">Taxa de Aprovação</string>
+    <string name="trends_top_categories">Categorias em Alta</string>
+    <string name="trends_recent_approved">Aprovadas Recentemente</string>
+
+    <!-- Lider Perfil -->
+    <string name="lider_profile_activity_title">Atividade</string>
+    <string name="lider_profile_metric_orientations">Orientações</string>
+    <string name="lider_profile_metric_ideas_reviewed">Ideias Avaliadas</string>
+
+    <!-- IdeaStatus -->
+    <string name="idea_status_waiting">Aguardando</string>
+    <string name="idea_status_in_analysis">Em Análise</string>
+    <string name="idea_status_approved">Aprovada</string>
+    <string name="idea_status_rejected">Rejeitada</string>
+    <string name="idea_status_in_project">Em Projeto</string>
+
+    <!-- IdeaCategory -->
+    <string name="idea_category_technology">Tecnologia</string>
+    <string name="idea_category_process">Processo</string>
+    <string name="idea_category_product">Produto</string>
+    <string name="idea_category_people">Pessoas</string>
+    <string name="idea_category_short_sustain">Sustent.</string>
+    <string name="idea_category_sustainability">Sustentabilidade</string>
+    <string name="idea_category_safety">Segurança</string>
+    <string name="idea_category_logistics">Logística</string>
+    <string name="idea_category_financial">Financeiro</string>
+    <string name="idea_category_service">Atendimento</string>
+    <string name="idea_category_others">Outros</string>
+
+    <!-- ProjectStatus -->
+    <string name="project_status_planning">Planejamento</string>
+    <string name="project_status_in_progress">Em Andamento</string>
+    <string name="project_status_completed">Concluído</string>
+    <string name="project_status_suspended">Suspenso</string>
+    <string name="project_status_cancelled">Cancelado</string>
+
+    <!-- OrientationPriority -->
+    <string name="orientation_priority_low">Baixa</string>
+    <string name="orientation_priority_medium">Média</string>
+    <string name="orientation_priority_high">Alta</string>
+    <string name="orientation_priority_critical">Crítica</string>
+
+    <!-- UserRole -->
+    <string name="user_role_operator">Operador</string>
+    <string name="user_role_manager">Gestor</string>
+    <string name="user_role_leader">Líder</string>
+    <string name="user_role_leader_position">Diretor</string>
+
+    <!-- NotificationType -->
+    <string name="notification_type_idea_approved">Ideia Aprovada</string>
+    <string name="notification_type_idea_rejected">Ideia Rejeitada</string>
+    <string name="notification_type_idea_in_analysis">Ideia em Análise</string>
+    <string name="notification_type_new_orientation">Nova Orientação</string>
+    <string name="notification_type_project_update">Projeto Atualizado</string>
+    <string name="notification_type_feedback">Feedback Recebido</string>
+    <string name="notification_type_system">Sistema</string>
+
+    <!-- Accessibility -->
+    <string name="cd_new_idea_fab">Nova Ideia</string>
+    <string name="cd_new_project_fab">Novo Projeto</string>
+    <string name="cd_new_orientation_fab">Nova Orientação</string>
+    <string name="cd_back_button">Voltar</string>
+    <string name="cd_edit_button">Editar</string>
+    <string name="cd_delete_button">Excluir</string>
+    <string name="cd_logout_button">Sair</string>
+    <string name="cd_score_ring">Pontuação: %1$d</string>
+    <string name="cd_show_password">Mostrar senha</string>
+    <string name="cd_hide_password">Ocultar senha</string>
+    <string name="cd_notifications_bell">Notificações</string>
+    <string name="cd_user_avatar">Foto do usuário</string>
+    <string name="profile_change_photo">Alterar foto</string>
+
+    <!-- Format strings -->
+    <string name="format_idea_metadata">%1$s · %2$s · %3$s</string>
+    <string name="format_by_and_time">Por %1$s · %2$s</string>
+    <string name="format_score_display">%1$d / 100</string>
+    <string name="idea_card_score_badge">Score %1$d</string>
+    <string name="project_card_manager_label">Gestor: %1$s</string>
+    <string name="project_card_roi_label">ROI estimado: %1$s</string>
+
+    <!-- Create project -->
+    <string name="date_picker_title">Data de entrega</string>
+    <string name="picker_title_idea_origin">Selecione uma ideia aprovada</string>
+    <string name="picker_title_sponsor">Selecione o patrocinador</string>
+    <string name="picker_title_orientation">Selecione a orientação estratégica</string>
+    <string name="project_create_title">Novo projeto</string>
+    <string name="project_create_field_name">Nome do projeto</string>
+    <string name="project_create_field_idea">Ideia de origem</string>
+    <string name="project_create_placeholder_idea">Selecione uma ideia aprovada</string>
+    <string name="project_create_no_idea_selected">Nenhuma ideia selecionada</string>
+    <string name="project_create_origin_badge">Originado da ideia · #%1$s</string>
+    <string name="project_create_origin_prompt">Selecione uma ideia aprovada</string>
+    <string name="project_create_field_sponsor">Sponsor</string>
+    <string name="project_create_field_delivery">Data de entrega</string>
+    <string name="project_create_placeholder_delivery">Selecione uma data</string>
+    <string name="project_create_field_roi">ROI previsto (R$ mil)</string>
+    <string name="project_create_roi_helper">Estimativa em 12 meses</string>
+    <string name="project_create_field_orientation">Orientação estratégica</string>
+    <string name="project_create_field_description">Descrição executiva</string>
+    <string name="project_create_field_milestones">Marcos iniciais</string>
+    <string name="project_create_btn_create">Criar projeto</string>
+    <string name="project_create_error_fill_required">Preencha todos os campos obrigatórios, incluindo a data de entrega.</string>
+    <string name="project_create_placeholder_name">Nome do projeto</string>
+    <string name="project_create_placeholder_roi">Valor em R$ mil</string>
+    <string name="project_create_placeholder_description">Resumo executivo do projeto</string>
+    <string name="project_create_field_team">Equipe do projeto</string>
+    <string name="project_add_milestone">Adicionar marco</string>
+    <string name="project_add_team_member">Adicionar membro</string>
+    <string name="project_milestones_empty_hint">Adicione marcos para acompanhar a entrega. Um card aberto por vez.</string>
+    <string name="project_team_empty_hint">Adicione colaboradores e o papel no projeto (sponsor, PM, tech lead, etc.).</string>
+    <string name="project_milestone_item_label">Marco %1$d</string>
+    <string name="project_team_member_item_label">Membro %1$d</string>
+    <string name="project_milestone_field_title">Nome do marco</string>
+    <string name="project_milestone_title_placeholder">ex.: Validação técnica</string>
+    <string name="project_milestone_field_due_date">Data prevista</string>
+    <string name="project_milestone_field_status">Status</string>
+    <string name="project_team_field_person">Pessoa</string>
+    <string name="project_team_field_role">Papel no projeto</string>
+    <string name="project_team_select_person">Selecione um colaborador</string>
+    <string name="project_team_select_role">Selecione o papel</string>
+    <string name="project_remove_milestone_cd">Remover marco</string>
+    <string name="project_expand_milestone_cd">Expandir marco</string>
+    <string name="project_collapse_milestone_cd">Recolher marco</string>
+    <string name="project_remove_team_member_cd">Remover membro</string>
+    <string name="project_expand_team_member_cd">Expandir membro</string>
+    <string name="project_collapse_team_member_cd">Recolher membro</string>
+    <string name="picker_title_milestone_status">Status do marco</string>
+    <string name="picker_title_team_member">Selecionar colaborador</string>
+    <string name="picker_search_person_placeholder">Buscar por nome</string>
+    <string name="picker_search_person_empty">Nenhum colaborador encontrado com esse nome.</string>
+    <string name="picker_title_team_role">Papel no projeto</string>
+    <string name="milestone_status_pending">Pendente</string>
+    <string name="milestone_status_in_progress">Em andamento</string>
+    <string name="milestone_status_completed">Concluído</string>
+    <string name="state_empty_milestones">Nenhum marco definido ainda.</string>
+    <string name="state_empty_team">Nenhum membro na equipe deste projeto.</string>
+
+    <string name="picker_title_category">Selecione a categoria</string>
+    <string name="picker_title_period">Selecione o período</string>
+    <string name="picker_title_month">Selecione o mês</string>
+    <string name="picker_title_visibility">Selecione a visibilidade</string>
+    <string-array name="orientation_period_options">
+        <item>Q3 2026 — Q2 2027</item>
+        <item>Q4 2026 — Q3 2027</item>
+        <item>Ano inteiro 2026</item>
+    </string-array>
+    <string-array name="orientation_visibility_options">
+        <item>Todos os perfis</item>
+        <item>Apenas gestores</item>
+        <item>Apenas liderança</item>
+    </string-array>
+    <string-array name="project_sponsor_options">
+        <item>Ana Silva — Logística</item>
+        <item>João Costa — Operações</item>
+        <item>Maria Santos — Comercial</item>
+    </string-array>
+    <string-array name="project_orientation_options">
+        <item>#1 Transformação digital</item>
+        <item>#2 Experiência do cliente</item>
+        <item>#3 Eficiência operacional</item>
+    </string-array>
+    <string-array name="project_team_role_options">
+        <item>Sponsor</item>
+        <item>Idealizador</item>
+        <item>Tech Lead</item>
+        <item>PM</item>
+    </string-array>
+</resources>

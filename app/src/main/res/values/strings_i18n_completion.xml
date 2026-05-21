@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Idea details -->
+    <string name="idea_title_format">Idea #%1$s</string>
+    <string name="action_copy_id">Copy ID</string>
+    <string name="idea_details_breakdown">Breakdown</string>
+    <string name="idea_details_ai_analysis">AI analysis</string>
+    <string name="idea_details_section_category">CATEGORY</string>
+    <string name="idea_details_dates_line">SUBMITTED ON %1$s · UPDATED ON %2$s</string>
+    <string name="idea_insight_technical">High technical feasibility — existing infrastructure covers 80% of requirements.</string>
+    <string name="idea_insight_alignment">Aligns with Strategic Guidance 2026 #3 — Operational Efficiency.</string>
+    <string name="idea_insight_investment">Requires estimated initial investment of R$ 80–120k.</string>
+    <string name="idea_insight_payback">Estimated payback: 8 months · Projected ROI of 240%.</string>
+    <string name="score_breakdown_technical">Technical feasibility</string>
+    <string name="score_breakdown_strategic">Strategic alignment</string>
+    <string name="score_breakdown_impact">Estimated impact</string>
+    <string name="score_breakdown_resources">Required resources</string>
+    <string name="score_breakdown_risk">Risk</string>
+    <string name="timeline_calculating_score">Calculating score (AI)</string>
+    <string name="timeline_forwarded_manager">Forwarded to manager</string>
+    <string name="timeline_idea_submitted">Idea submitted</string>
+    <string name="timeline_hours_ago">2 hours ago</string>
+    <string name="format_category_and_id">%1$s · #%2$s</string>
+
+    <!-- Aria status badges -->
+    <string name="aria_status_pending">Waiting for review</string>
+    <string name="aria_status_review">In review</string>
+    <string name="aria_status_approved">Approved</string>
+    <string name="aria_status_rejected">Rejected</string>
+    <string name="aria_status_project">In project</string>
+    <string name="aria_status_active">Active</string>
+    <string name="aria_status_running">In progress</string>
+    <string name="label_score_uppercase">SCORE</string>
+
+    <!-- Gestor -->
+    <string name="label_roi">ROI</string>
+    <string name="gestor_sla_critical">CRITICAL SLA · %1$d DAYS</string>
+    <string name="gestor_high_match_orientation">HIGH MATCH · GUIDANCE #3</string>
+    <string name="gestor_high_match_percent">HIGH MATCH · %1$d%%</string>
+    <string name="gestor_insight_high_score_pending">3 high-score ideas waiting for review for more than 5 days.</string>
+    <string name="gestor_insight_tech_growth">Technology category grew +35% this quarter.</string>
+    <string name="gestor_insight_analysis_time">Average review time: 2.3 days. Target &lt; 3 days met.</string>
+    <string name="gestor_orientation_efficiency_title">Operational efficiency</string>
+    <string name="gestor_orientation_efficiency_sub">12 aligned ideas · 5 active projects</string>
+    <string name="pending_sort_label">SORT</string>
+    <string name="pending_sort_sla">SLA</string>
+    <string name="pending_sort_score">AI Score</string>
+    <string name="pending_sort_match">Match</string>
+
+    <!-- Operador AI suggestion -->
+    <string name="operador_similar_idea_label">SIMILAR IDEA · APPROVED 2023</string>
+    <string name="operador_similar_idea_title">Driver referral program</string>
+    <string name="operador_similar_idea_body">Bonus system for employees who refer qualified new drivers.</string>
+    <string name="operador_similar_roi">ROI R$ 120K</string>
+
+    <!-- Analyze idea -->
+    <string name="analyze_orientation_body">Reduce fleet operating cost and increase driver productivity by Q4.</string>
+    <string name="analyze_orientation_title">#3 Operational efficiency</string>
+    <string name="analyze_strengths">STRENGTHS</string>
+    <string name="analyze_attention_points">AREAS OF ATTENTION</string>
+    <string name="analyze_strength_technical">High technical feasibility</string>
+    <string name="analyze_strength_alignment">Strong alignment with guidance #3</string>
+    <string name="analyze_strength_complexity">Low implementation complexity</string>
+    <string name="analyze_attention_investment">Estimated initial investment of R$ 80k</string>
+    <string name="analyze_attention_legacy">Requires integration with legacy system</string>
+    <string name="analyze_ai_recommendation">AI recommendation: Approve and create project immediately.</string>
+
+    <!-- Project details -->
+    <string name="project_not_found_sub">Could not load the requested project.</string>
+    <string name="project_hero_progress">PROGRESS</string>
+    <string name="project_hero_roi_realized">REALIZED ROI</string>
+    <string name="idea_status_approved_uppercase">APPROVED</string>
+    <string name="format_roi_k">%1$s</string>
+    <string name="format_currency_symbol">R$</string>
+    <string name="format_metric_divider"> / %1$s</string>
+
+    <!-- Nova ideia errors -->
+    <string name="new_idea_error_title_required">Title is required.</string>
+    <string name="new_idea_error_category_required">Select a category.</string>
+    <string name="new_idea_error_description_required">Describe your idea.</string>
+
+    <!-- Auth / orientation VM -->
+    <string name="recover_error_invalid_email">Enter a valid email.</string>
+    <string name="create_orientation_ai_objective_default">Establish partnerships with 5 startups by Q2/2027 to accelerate the innovation pipeline.</string>
+    <string name="create_orientation_ai_metrics_default">• Partnerships signed · 5\n• Pilots launched · 8\n• ROI generated · R$ 1.2M</string>
+
+    <!-- Analytics -->
+    <string name="analise_prediction_title">52 ideas · Projected ROI R$ 520k</string>
+    <string name="analise_prediction_sub">FORECAST · NEXT QUARTER</string>
+    <string name="analise_prediction_volume">+15% in idea volume if current trend continues.</string>
+    <string name="analise_prediction_categories">Sustainability and AI categories should account for 60% of submissions.</string>
+    <string name="analise_prediction_orientation">Recommendation: create dedicated AI guidance to channel the flow.</string>
+    <string name="analise_recommendation_1">Publish \"AI applied to operations\" guidance — high concentration of related ideas.</string>
+    <string name="analise_recommendation_2">Re-review 3 ideas rejected in 2024 — technical feasibility has changed.</string>
+    <string name="analise_recommendation_3">Accelerate \"Checklist app\" project — realized ROI 35% below plan.</string>
+    <string name="analise_emerging_esg_title">ESG Sustainability</string>
+    <string name="analise_emerging_esg_body">14 ideas submitted in 30 days · 4 with score &gt; 75. Recommendation: prioritize review.</string>
+    <string name="analise_emerging_ai_title">AI applied to operations</string>
+    <string name="analise_emerging_ai_body">9 ideas · focused on routing and predictive maintenance.</string>
+    <string name="analise_trend_automation">AI / Automation</string>
+    <string name="analise_project_gamification">Gamification system</string>
+    <string name="analise_project_referral">Referral program</string>
+    <string name="analise_project_checklist">Checklist app</string>
+    <string name="analise_project_esg_panel">ESG dashboard</string>
+    <string name="analise_project_internal_tickets">Internal tickets</string>
+
+    <!-- Dashboard AI snapshots -->
+    <string name="dashboard_forecast_01">32 ideas projected for Feb (+15%) · Expected ROI R$ 260k</string>
+    <string name="dashboard_emerging_01">Process +22% · Technology stable</string>
+    <string name="dashboard_forecast_02">38 ideas projected for Mar (+18%) · Expected ROI R$ 320k</string>
+    <string name="dashboard_emerging_02">Technology +28% · Sustainability +12%</string>
+    <string name="dashboard_forecast_03">42 ideas projected for Apr (+11%) · Expected ROI R$ 380k</string>
+    <string name="dashboard_emerging_03">Technology +30% · Product +15%</string>
+    <string name="dashboard_forecast_04">45 ideas projected for May (+7%) · Expected ROI R$ 420k</string>
+    <string name="dashboard_emerging_04">Technology +25% · Sustainability +18%</string>
+    <string name="dashboard_forecast_05">52 ideas projected for Jun (+15%) · Expected ROI R$ 520k</string>
+    <string name="dashboard_emerging_05">Sustainability +45% · AI / Automation +30%</string>
+    <string name="dashboard_forecast_06">55 ideas projected for Jul (+8%) · Expected ROI R$ 560k</string>
+    <string name="dashboard_emerging_06">Sustainability +52% · Process +24%</string>
+    <string name="dashboard_forecast_07">48 ideas projected for Aug (−5%) · Expected ROI R$ 480k</string>
+    <string name="dashboard_emerging_07">Technology +20% · Service +15%</string>
+    <string name="dashboard_forecast_08">50 ideas projected for Sep (+4%) · Expected ROI R$ 500k</string>
+    <string name="dashboard_emerging_08">Technology +28% · AI / Automation +22%</string>
+    <string name="dashboard_forecast_09">54 ideas projected for Oct (+8%) · Expected ROI R$ 540k</string>
+    <string name="dashboard_emerging_09">Technology +32% · AI / Automation +28%</string>
+    <string name="dashboard_forecast_10">58 ideas projected for Nov (+7%) · Expected ROI R$ 580k</string>
+    <string name="dashboard_emerging_10">Sustainability +38% · Technology +25%</string>
+    <string name="dashboard_forecast_11">62 ideas projected for Dec (+7%) · Expected ROI R$ 620k</string>
+    <string name="dashboard_emerging_11">Sustainability +42% · Process +20%</string>
+    <string name="dashboard_forecast_12">65 ideas projected for Jan (+5%) · Expected ROI R$ 650k</string>
+    <string name="dashboard_emerging_12">Technology +35% · Sustainability +30%</string>
+    <string name="dashboard_top_routing_ia">AI Routing</string>
+    <string name="dashboard_top_checklist_app">Checklist app</string>
+    <string name="dashboard_top_esg_panel">ESG dashboard</string>
+    <string name="dashboard_top_gamification">Gamification system</string>
+    <string name="dashboard_top_driver_referral">Driver referral</string>
+
+    <!-- Leader orientations list -->
+    <string name="orientation_list_sustainability">Fleet sustainability</string>
+    <string name="orientation_list_sustainability_desc">Reduce CO₂ emissions by 25% by 2027 through electrification and logistics.</string>
+    <string name="orientation_list_digitalization">Process digitalization</string>
+    <string name="orientation_list_digitalization_desc">Eliminate 80% of paper in administrative and operational processes.</string>
+    <string name="orientation_list_efficiency">Operational efficiency</string>
+    <string name="orientation_list_efficiency_desc">Reduce fleet operating cost and increase driver productivity.</string>
+    <string name="orientation_list_culture">Innovation culture</string>
+    <string name="orientation_list_culture_desc">Triple the number of employees submitting ideas per quarter.</string>
+
+    <!-- Orientation details -->
+    <string name="orientation_status_active_2527">Active · 2025–2027</string>
+    <string name="orientation_status_active_2026">Active · 2026</string>
+    <string name="orientation_status_active_q">Active · 2026 Q2–Q4</string>
+    <string name="orientation_status_active_q14">Active · 2026 Q1–Q4</string>
+    <string name="orientation_detail_sustainability_desc">Reduce CO₂ emissions by 25% by 2027 through electrification and smart logistics.</string>
+    <string name="orientation_aligned_vans">Van electrification</string>
+    <string name="orientation_aligned_green_route">Green routing</string>
+    <string name="orientation_aligned_battery_reuse">Battery reuse</string>
+    <string name="orientation_aligned_digital_signature">Digital signature</string>
+    <string name="orientation_aligned_auto_workflow">Automated workflow</string>
+    <string name="orientation_aligned_supplier_portal">Supplier portal</string>
+    <string name="orientation_aligned_mentorship">Mentorship program</string>
+    <string name="orientation_aligned_hackathon">Quarterly hackathon</string>
+    <string name="orientation_aligned_maintenance_app">Mobile maintenance app</string>
+    <string name="orientation_aligned_routing_ia">AI routing</string>
+    <string name="orientation_metric_co2">CO₂ emissions</string>
+    <string name="orientation_metric_electric_fleet">Electric fleet</string>
+    <string name="orientation_metric_fuel_cost">Fuel cost</string>
+    <string name="orientation_metric_digital_docs">Digital documents</string>
+    <string name="orientation_metric_approval_time">Approval time</string>
+    <string name="orientation_metric_paper_cost">Paper cost</string>
+    <string name="orientation_metric_active_collaborators">Active collaborators</string>
+    <string name="orientation_metric_ideas_per_quarter">Ideas per quarter</string>
+    <string name="orientation_metric_operational_cost">Operational cost/km</string>
+    <string name="orientation_metric_driver_productivity">Driver productivity</string>
+    <string name="orientation_metric_maintenance_time">Maintenance time</string>
+
+    <string name="cd_filter">Filter</string>
+    <string name="cd_help">Help</string>
+    <string name="profile_label_email">EMAIL</string>
+    <string name="profile_label_department">DEPARTMENT</string>
+    <string name="profile_label_role">ROLE</string>
+
+    <string name="gestor_sla_attention">ATTENTION · %1$d DAYS</string>
+    <string name="gestor_sla_queue_days">%1$d DAYS IN QUEUE</string>
+    <string name="gestor_action_analyze">Review</string>
+    <string name="dept_logistics_default">LOGISTICS</string>
+    <string name="project_title_fallback">Project</string>
+    <string name="format_author_category_id">%1$s · %2$s · #%3$s</string>
+    <string name="project_milestone_tech_validation">Technical validation</string>
+    <string name="project_milestone_pilot">Pilot with 50 drivers</string>
+    <string name="project_milestone_southeast_launch">Southeast launch</string>
+    <string name="project_milestone_national_rollout">National rollout</string>
+    <string name="project_milestone_date_may_15">15/May</string>
+    <string name="project_milestone_date_jun_20">20/Jun</string>
+    <string name="project_milestone_date_aug_15">15/Aug</string>
+    <string name="project_milestone_date_sep_15">15/Sep</string>
+    <string name="project_milestone_in_progress">IN PROGRESS · DELIVERY %1$s</string>
+    <string name="project_team_role_sponsor">Sponsor</string>
+    <string name="project_team_role_idealizer">Ideator</string>
+    <string name="project_team_role_tech_lead">Tech Lead</string>
+    <string name="project_team_role_pm">PM</string>
+    <string name="analise_month_jan">Jan</string>
+    <string name="analise_month_feb">Feb</string>
+    <string name="analise_month_mar">Mar</string>
+    <string name="analise_month_apr">Apr</string>
+    <string name="analise_month_may">May</string>
+    <string name="analise_tab_roi">ROI</string>
+    <string name="analise_tab_trends">TRENDS</string>
+    <string name="analise_tab_ai">AI</string>
+    <string name="analise_export_header">ARIA · Analytics</string>
+    <string name="analise_export_tab">Tab: %1$s</string>
+    <string name="analise_export_cumulative_roi">Cumulative ROI: %1$s%2$s (Δ +%3$d%%)</string>
+    <string name="analise_export_monthly_roi">Monthly ROI (R$ k, approx.)</string>
+    <string name="analise_export_top_projects">Top projects (realized k / target k)</string>
+    <string name="analise_export_trends">Trends (variation)</string>
+    <string name="analise_export_ai_headline">AI headline: %1$s</string>
+    <string name="analise_trend_process">Process</string>
+    <string name="analise_trend_product">Product</string>
+    <string name="analise_trend_change_up_35">+35%</string>
+    <string name="analise_trend_change_up_45">+45%</string>
+    <string name="analise_trend_change_up_30">+30%</string>
+    <string name="analise_change_down_4">−4%</string>
+    <string name="analise_change_down_8">−8%</string>
+    <string name="analise_emerging_esg_title_full">ESG Sustainability</string>
+    <string name="analise_emerging_esg_body_full">14 ideas submitted in 30 days · 4 with score &gt; 75. Recommendation: prioritize review.</string>
+    <string name="analise_emerging_ai_body_full">9 ideas · focused on routing and predictive maintenance.</string>
+    <string name="create_orientation_default_title">Open innovation with partners</string>
+</resources>
