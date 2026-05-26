@@ -1,4 +1,4 @@
-# ARIA — Sistema de Gestão de Inovação
+# ARIA — Plataforma de Gestão de Inovação Corporativa
 
 Documentação técnica do aplicativo Android, alinhada ao **Kickoff Challenge Águia Branca — Sprint 1** (`estudo/Kickoff_Challenge_AguiaBranca_Sprint1.pdf`). Descreve o que está implementado no repositório em **maio/2026**, sem suposições de backend de produção.
 
