@@ -86,6 +86,11 @@ class NovaIdeiaViewModel @Inject constructor(
         val state = _uiState.value
         val user = state.currentUser ?: return
 
+        if (state.title.isBlank() || state.category == null || state.description.isBlank()) {
+            _uiState.update { it.copy(error = "Preencha os campos obrigatórios.") }
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             val idea = Idea(
