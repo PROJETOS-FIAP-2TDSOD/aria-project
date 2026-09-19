@@ -3,8 +3,10 @@ package com.fiap.ariachallenge.data.remote
 import com.fiap.ariachallenge.data.remote.dto.AuthResponseDto
 import com.fiap.ariachallenge.data.remote.dto.IdeaDto
 import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
+import com.fiap.ariachallenge.data.remote.dto.MessageResponseDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
+import com.fiap.ariachallenge.data.remote.dto.RecoverPasswordRequestDto
 import com.fiap.ariachallenge.data.remote.dto.RegisterRequestDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -19,6 +21,9 @@ interface AriaApiService {
 
     @POST("api/v1/auth/register")
     suspend fun register(@Body body: RegisterRequestDto): AuthResponseDto
+
+    @POST("api/v1/auth/recover-password")
+    suspend fun recoverPassword(@Body request: RecoverPasswordRequestDto): MessageResponseDto
 
     @GET("api/v1/ideas")
     suspend fun getIdeas(): List<IdeaDto>
