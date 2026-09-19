@@ -1,7 +1,6 @@
 package com.fiap.ariachallenge.di
 
 import com.fiap.ariachallenge.data.remote.AriaApiService
-import com.fiap.ariachallenge.data.remote.AriaMockApiInterceptor
 import com.fiap.ariachallenge.data.remote.BearerTokenInterceptor
 import dagger.Module
 import dagger.Provides
@@ -14,6 +13,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+// Emulador (padrao): 10.0.2.2 aponta para o localhost do PC host.
+// Dispositivo fisico: troque pelo IP do PC na rede local (ver network_security_config.xml).
+private const val BASE_URL = "http://10.0.2.2:8080/"
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -22,14 +25,12 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         bearerTokenInterceptor: BearerTokenInterceptor,
-        mockInterceptor: AriaMockApiInterceptor,
     ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
         return OkHttpClient.Builder()
             .addInterceptor(bearerTokenInterceptor)
-            .addInterceptor(mockInterceptor)
             .addInterceptor(logging)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
@@ -40,7 +41,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl("https://aria-mock.api/")
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
