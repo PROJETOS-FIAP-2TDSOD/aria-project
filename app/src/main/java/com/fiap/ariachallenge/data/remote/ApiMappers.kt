@@ -5,9 +5,12 @@ import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationKeyMetricDto
 import com.fiap.ariachallenge.domain.model.OrientationKeyMetric
+import com.fiap.ariachallenge.data.remote.dto.MilestoneInputDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectMilestoneDto
+import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectTeamMemberDto
+import com.fiap.ariachallenge.data.remote.dto.TeamMemberInputDto
 import com.fiap.ariachallenge.data.remote.dto.UserDto
 import com.fiap.ariachallenge.domain.model.Idea
 import com.fiap.ariachallenge.domain.model.MilestoneStatus
@@ -135,9 +138,35 @@ fun Project.toDto(): ProjectDto = ProjectDto(
     strategicOrientationLabel = strategicOrientationLabel,
     teamMembers = teamMembers.map { it.toDto() },
     milestones = milestones.map { it.toDto() },
-    startDate = startDate.format(dateTimeFormatter),
-    expectedEndDate = expectedEndDate.format(dateTimeFormatter),
+    startDate = startDate.toLocalDate().format(dateFormatter),
+    expectedEndDate = expectedEndDate.toLocalDate().format(dateFormatter),
     updatedAt = updatedAt.format(dateTimeFormatter),
+)
+
+// Payload real de criacao/edicao (POST/PUT) — so os campos que ProjectRequestDto.java aceita
+fun Project.toRequestDto(): ProjectRequestDto = ProjectRequestDto(
+    title = title,
+    description = description,
+    originIdeaId = originIdea.id,
+    sponsorLabel = sponsorLabel,
+    strategicOrientationLabel = strategicOrientationLabel,
+    budget = budget,
+    estimatedRoi = estimatedRoi,
+    teamMembers = teamMembers.map { it.toInputDto() },
+    milestones = milestones.map { it.toInputDto() },
+    startDate = startDate.toLocalDate().format(dateFormatter),
+    expectedEndDate = expectedEndDate.toLocalDate().format(dateFormatter),
+)
+
+fun ProjectTeamMember.toInputDto(): TeamMemberInputDto = TeamMemberInputDto(
+    userId = user.id,
+    projectRole = projectRole,
+)
+
+fun ProjectMilestone.toInputDto(): MilestoneInputDto = MilestoneInputDto(
+    title = title,
+    dueDate = dueDate.format(dateFormatter),
+    status = status.name,
 )
 
 fun ProjectDto.toDomain(): Project = Project(
@@ -155,8 +184,8 @@ fun ProjectDto.toDomain(): Project = Project(
     strategicOrientationLabel = strategicOrientationLabel,
     teamMembers = teamMembers.map { it.toDomain() },
     milestones = milestones.map { it.toDomain() },
-    startDate = LocalDateTime.parse(startDate, dateTimeFormatter),
-    expectedEndDate = LocalDateTime.parse(expectedEndDate, dateTimeFormatter),
+    startDate = LocalDate.parse(startDate, dateFormatter).atStartOfDay(),
+    expectedEndDate = LocalDate.parse(expectedEndDate, dateFormatter).atStartOfDay(),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
 )
 

@@ -8,6 +8,8 @@ import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
 import com.fiap.ariachallenge.data.remote.dto.MessageResponseDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
+import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
+import com.fiap.ariachallenge.data.remote.dto.ProjectUpdateProgressDto
 import com.fiap.ariachallenge.data.remote.dto.RecoverPasswordRequestDto
 import com.fiap.ariachallenge.data.remote.dto.RegisterRequestDto
 import retrofit2.http.Body
@@ -53,10 +55,13 @@ interface AriaApiService {
     suspend fun getProjects(): List<ProjectDto>
 
     @POST("api/v1/projects")
-    suspend fun createProject(@Body project: ProjectDto): ProjectDto
+    suspend fun createProject(@Body project: ProjectRequestDto): ProjectDto
 
     @PUT("api/v1/projects/{id}")
-    suspend fun updateProject(@Path("id") id: String, @Body project: ProjectDto): ProjectDto
+    suspend fun updateProject(@Path("id") id: String, @Body project: ProjectRequestDto): ProjectDto
+
+    @PATCH("api/v1/projects/{id}/progress")
+    suspend fun updateProjectProgress(@Path("id") id: String, @Body progress: ProjectUpdateProgressDto): ProjectDto
 
     @DELETE("api/v1/projects/{id}")
     suspend fun deleteProject(@Path("id") id: String)
