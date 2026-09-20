@@ -69,18 +69,12 @@ class AnalisarIdeiaViewModel @Inject constructor(
         val idea = state.idea ?: return
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmitting = true) }
-            val estimatedRoi = when {
-                newStatus != IdeaStatus.APROVADA -> idea.estimatedRoi
-                idea.estimatedRoi != null -> idea.estimatedRoi
-                else -> state.score * 2_000.0
-            }
-            val updated = idea.copy(
+            ideaRepository.reviewIdea(
+                id = idea.id,
                 status = newStatus,
                 score = state.score,
                 gestorFeedback = state.feedback.ifBlank { null },
-                estimatedRoi = estimatedRoi,
-            )
-            ideaRepository.updateIdea(updated).fold(
+            ).fold(
                 onSuccess = {
                     _uiState.update {
                         it.copy(
