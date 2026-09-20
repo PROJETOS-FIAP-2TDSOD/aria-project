@@ -18,3 +18,11 @@ data class AuthResponseDto(
     val expiresInSeconds: Long = 0,
     val user: UserDto,
 )
+
+data class RecoverPasswordRequestDto(
+    val email: String,
+)
+
+data class MessageResponseDto(
+    val message: String,
+)
