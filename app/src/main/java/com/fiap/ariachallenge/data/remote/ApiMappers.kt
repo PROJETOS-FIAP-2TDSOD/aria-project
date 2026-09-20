@@ -44,11 +44,10 @@ fun UserDto.toDomain(): User = User(
     email = email,
     role = UserRole.valueOf(role),
     department = department,
-    avatarInitials = avatarInitials.ifBlank { name.take(2).uppercase() },
+    avatarInitials = avatarInitials.orEmpty().ifBlank { name.take(2).uppercase() },
     totalIdeas = totalIdeas,
     approvedIdeas = approvedIdeas,
 )
-
 fun Idea.toDto(): IdeaDto = IdeaDto(
     id = id,
     title = title,
