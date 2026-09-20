@@ -84,7 +84,6 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun recoverPassword(email: String): Result<Unit> = runCatching {
-        delay(400)
         api.recoverPassword(RecoverPasswordRequestDto(email = email.trim().lowercase()))
         Unit
     }.recoverCatching { error ->
