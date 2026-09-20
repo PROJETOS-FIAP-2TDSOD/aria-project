@@ -199,6 +199,11 @@ fun AnalisarIdeiaScreen(
                             1 -> scoreContent(
                                 score = uiState.score.takeIf { it > 0 } ?: idea.score ?: 0,
                                 brief = brief,
+                                aiScore = idea.aiScore,
+                                aiJustification = idea.aiJustification,
+                                isScoringWithAi = uiState.isScoringWithAi,
+                                aiScoreError = uiState.aiScoreError,
+                                onScoreWithAi = viewModel::scoreWithAi,
                             )
                             else -> orientContent(brief)
                         }
@@ -238,13 +243,30 @@ private fun HeaderBlock(idea: Idea) {
     }
 }
 
-private fun androidx.compose.foundation.lazy.LazyListScope.scoreContent(score: Int, brief: AiAnalyzeBrief?) {
+private fun androidx.compose.foundation.lazy.LazyListScope.scoreContent(
+    score: Int,
+    brief: AiAnalyzeBrief?,
+    aiScore: Int?,
+    aiJustification: String?,
+    isScoringWithAi: Boolean,
+    aiScoreError: String?,
+    onScoreWithAi: () -> Unit,
+) {
     item {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             AriaScoreRing(value = score, size = AriaScoreRingDefaults.Detail)
         }
     }
     item { ScoreBreakdownCard(brief = brief) }
+    item {
+        AiScoreCard(
+            aiScore = aiScore,
+            aiJustification = aiJustification,
+            isLoading = isScoringWithAi,
+            error = aiScoreError,
+            onScoreWithAi = onScoreWithAi,
+        )
+    }
 }
 
 private fun androidx.compose.foundation.lazy.LazyListScope.infoContent(idea: Idea) {
@@ -315,6 +337,57 @@ private fun ScoreBreakdownCard(brief: AiAnalyzeBrief?) {
             ) {
                 Icon(imageVector = Icons.Outlined.AutoAwesome, contentDescription = null, tint = c.accentMain, modifier = Modifier.size(14.dp))
                 Text(text = data.recommendation, style = AriaText.bodyMd, color = c.textPrimary)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AiScoreCard(
+    aiScore: Int?,
+    aiJustification: String?,
+    isLoading: Boolean,
+    error: String?,
+    onScoreWithAi: () -> Unit,
+) {
+    val c = AriaTheme.colors
+    AriaCard(padding = 16.dp, accent = true) {
+        Column {
+            DotLabel(color = c.accentMain, text = stringResource(R.string.analyze_idea_ai_score_title))
+            Spacer(modifier = Modifier.height(8.dp))
+            if (aiScore != null) {
+                Text(
+                    text = stringResource(R.string.format_ai_score_value, aiScore),
+                    style = AriaText.titleMd,
+                    color = c.textPrimary,
+                )
+                if (!aiJustification.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(text = aiJustification, style = AriaText.bodyMd, color = c.textSecondary)
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+            if (error != null) {
+                Text(text = error, style = AriaText.bodyMd, color = c.error)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(if (isLoading) c.bgTertiary else c.accentMain)
+                    .clickable(enabled = !isLoading, onClick = onScoreWithAi)
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = stringResource(
+                        if (aiScore == null) R.string.analyze_idea_ai_score_button
+                        else R.string.analyze_idea_ai_score_button_retry
+                    ),
+                    color = if (isLoading) c.textSecondary else Color.White,
+                    style = AriaText.labelMd,
+                )
             }
         }
     }

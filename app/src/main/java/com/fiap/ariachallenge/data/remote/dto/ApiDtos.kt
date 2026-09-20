@@ -24,8 +24,28 @@ data class IdeaDto(
     val score: Int? = null,
     val gestorFeedback: String? = null,
     val estimatedRoi: Double? = null,
+    val aiScore: Int? = null,
+    val aiJustification: String? = null,
+    val aiAnalyzedAt: String? = null,
     val createdAt: String,
     val updatedAt: String,
+)
+
+// Payload de POST/PUT /ideas — espelha IdeaRequestDto.java (sem id/author/status/score)
+data class IdeaRequestDto(
+    val title: String,
+    val category: String,
+    val description: String,
+    val problema: String,
+    val beneficios: String,
+    val recursos: String,
+)
+
+// Payload de PATCH /ideas/{id}/review — espelha IdeaReviewDto.java
+data class IdeaReviewDto(
+    val status: String,
+    val score: Int? = null,
+    val gestorFeedback: String? = null,
 )
 
 data class ProjectMilestoneDto(
