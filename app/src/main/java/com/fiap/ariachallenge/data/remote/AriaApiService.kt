@@ -2,6 +2,8 @@ package com.fiap.ariachallenge.data.remote
 
 import com.fiap.ariachallenge.data.remote.dto.AuthResponseDto
 import com.fiap.ariachallenge.data.remote.dto.IdeaDto
+import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
+import com.fiap.ariachallenge.data.remote.dto.IdeaReviewDto
 import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
 import com.fiap.ariachallenge.data.remote.dto.MessageResponseDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
@@ -11,6 +13,7 @@ import com.fiap.ariachallenge.data.remote.dto.RegisterRequestDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -28,11 +31,20 @@ interface AriaApiService {
     @GET("api/v1/ideas")
     suspend fun getIdeas(): List<IdeaDto>
 
+    @GET("api/v1/ideas/{id}")
+    suspend fun getIdeaById(@Path("id") id: String): IdeaDto
+
     @POST("api/v1/ideas")
-    suspend fun createIdea(@Body idea: IdeaDto): IdeaDto
+    suspend fun createIdea(@Body idea: IdeaRequestDto): IdeaDto
 
     @PUT("api/v1/ideas/{id}")
-    suspend fun updateIdea(@Path("id") id: String, @Body idea: IdeaDto): IdeaDto
+    suspend fun updateIdea(@Path("id") id: String, @Body idea: IdeaRequestDto): IdeaDto
+
+    @PATCH("api/v1/ideas/{id}/review")
+    suspend fun reviewIdea(@Path("id") id: String, @Body review: IdeaReviewDto): IdeaDto
+
+    @POST("api/v1/ideas/{id}/ai-score")
+    suspend fun scoreIdeaWithAi(@Path("id") id: String): IdeaDto
 
     @DELETE("api/v1/ideas/{id}")
     suspend fun deleteIdea(@Path("id") id: String)

@@ -1,6 +1,7 @@
 package com.fiap.ariachallenge.data.remote
 
 import com.fiap.ariachallenge.data.remote.dto.IdeaDto
+import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationKeyMetricDto
 import com.fiap.ariachallenge.domain.model.OrientationKeyMetric
@@ -78,8 +79,21 @@ fun IdeaDto.toDomain(): Idea = Idea(
     score = score,
     gestorFeedback = gestorFeedback,
     estimatedRoi = estimatedRoi,
+    aiScore = aiScore,
+    aiJustification = aiJustification,
+    aiAnalyzedAt = aiAnalyzedAt?.let { LocalDateTime.parse(it, dateTimeFormatter) },
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
+)
+
+// Payload real de criação/edição (POST/PUT) — só os 6 campos que o backend aceita
+fun Idea.toRequestDto(): IdeaRequestDto = IdeaRequestDto(
+    title = title,
+    category = category.name,
+    description = description,
+    problema = problema,
+    beneficios = beneficios,
+    recursos = recursos,
 )
 
 fun ProjectMilestone.toDto(): ProjectMilestoneDto = ProjectMilestoneDto(
