@@ -8,7 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import com.fiap.ariachallenge.data.repository.FakeAiRepository
 import com.fiap.ariachallenge.data.repository.IdeaRepositoryImpl
 import com.fiap.ariachallenge.data.repository.FakeOrientationRepository
-import com.fiap.ariachallenge.data.repository.FakeProjectRepository
+import com.fiap.ariachallenge.data.repository.ProjectRepositoryImpl
 import com.fiap.ariachallenge.data.repository.FakeUserRepository
 import com.fiap.ariachallenge.domain.repository.IAiRepository
 import com.fiap.ariachallenge.domain.repository.IAuthRepository
@@ -36,7 +36,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindProjectRepository(impl: FakeProjectRepository): IProjectRepository
+    abstract fun bindProjectRepository(impl: ProjectRepositoryImpl): IProjectRepository
 
     @Binds
     @Singleton
