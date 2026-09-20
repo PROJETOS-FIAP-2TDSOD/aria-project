@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <!-- Emulador Android: 10.0.2.2 e o alias para o localhost da maquina host -->
+        <!-- Libera trafego HTTP sem TLS (cleartext) apenas para os enderecos de desenvolvimento
+         local abaixo. -->
+        <!-- Emulador Android padrao (AVD): 10.0.2.2 e o alias para o localhost da maquina host -->
         <domain includeSubdomains="false">10.0.2.2</domain>
+
+        <!-- Genymotion: 10.0.3.2 e o gateway padrao dele para a maquina host -->
+        <domain includeSubdomains="false">10.0.3.2</domain>
 
         <!-- Dispositivo fisico: troque pelo IP da sua maquina na rede local. Precisa estar na MESMA rede Wi-Fi do PC, e o firewall do Windows pode precisar liberar a porta 8080. -->
         <domain includeSubdomains="false">192.168.15.102</domain>
