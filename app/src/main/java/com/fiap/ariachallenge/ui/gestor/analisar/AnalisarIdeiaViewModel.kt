@@ -26,6 +26,8 @@ data class AnalisarIdeiaUiState(
     val isSuccess: Boolean = false,
     val approvedForProject: Boolean = false,
     val aiBrief: AiAnalyzeBrief? = null,
+    val isScoringWithAi: Boolean = false,
+    val aiScoreError: String? = null,
     val error: String? = null,
 )
 
@@ -51,6 +53,18 @@ class AnalisarIdeiaViewModel @Inject constructor(
 
     fun clearApprovedForProject() {
         _uiState.update { it.copy(approvedForProject = false) }
+    }
+
+    fun scoreWithAi() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isScoringWithAi = true, aiScoreError = null) }
+            ideaRepository.scoreIdeaWithAi(ideaId).fold(
+                onSuccess = { updatedIdea ->
+                    _uiState.update { it.copy(isScoringWithAi = false, idea = updatedIdea) }
+                },
+                onFailure = { e -> _uiState.update { it.copy(isScoringWithAi = false, aiScoreError = e.message) } },
+            )
+        }
     }
 
     private fun loadIdea() {
