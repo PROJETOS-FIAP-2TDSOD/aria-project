@@ -13,9 +13,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-// Emulador (padrao): 10.0.2.2 aponta para o localhost do PC host.
-// Dispositivo fisico: troque pelo IP do PC na rede local (ver network_security_config.xml).
-private const val BASE_URL = "http://10.0.2.2:8080/"
+// Ambiente de desenvolvimento local. Descomente a linha do emulador que voce esta usando
+// e comente a outra — NAO deixe as duas descomentadas ao mesmo tempo.
+
+// Emulador padrao do Android Studio (AVD): 10.0.2.2 e o alias para o localhost do PC host.
+// private const val BASE_URL = "http://10.0.2.2:8080/"
+
+// Genymotion: 10.0.3.2 e o gateway padrao dele para o PC host.
+private const val BASE_URL = "http://10.0.3.2:8080/"
+
+// Dispositivo fisico: troque pelo IP da maquina na rede local (ver network_security_config.xml).
 
 @Module
 @InstallIn(SingletonComponent::class)
