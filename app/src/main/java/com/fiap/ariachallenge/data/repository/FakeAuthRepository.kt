@@ -2,7 +2,6 @@ package com.fiap.ariachallenge.data.repository
 
 import com.fiap.ariachallenge.data.remote.AriaApiService
 import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
-import com.fiap.ariachallenge.data.remote.dto.RecoverPasswordRequestDto
 import com.fiap.ariachallenge.data.remote.dto.RegisterRequestDto
 import com.fiap.ariachallenge.data.remote.toDomain
 import com.fiap.ariachallenge.data.local.BadgeUnlockTracker
@@ -16,7 +15,7 @@ import kotlinx.coroutines.delay
 import retrofit2.HttpException
 
 @Singleton
-class AuthRepositoryImpl @Inject constructor(
+class FakeAuthRepository @Inject constructor(
     private val api: AriaApiService,
     private val authSessionManager: AuthSessionManager,
     private val userRepository: FakeUserRepository,
@@ -83,13 +82,9 @@ class AuthRepositoryImpl @Inject constructor(
         return user
     }
 
-    override suspend fun recoverPassword(email: String): Result<Unit> = runCatching {
-        api.recoverPassword(RecoverPasswordRequestDto(email = email.trim().lowercase()))
-        Unit
-    }.recoverCatching { error ->
-        if (error is HttpException && error.code() == 400) {
-            throw Exception("ERR_INVALID_EMAIL")
-        }
-        throw error
+    override suspend fun recoverPassword(email: String): Result<Unit> {
+        delay(1200)
+        return if (email.contains("@")) Result.success(Unit)
+        else Result.failure(Exception("ERR_INVALID_EMAIL"))
     }
 }

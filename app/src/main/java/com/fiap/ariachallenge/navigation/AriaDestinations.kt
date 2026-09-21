@@ -57,6 +57,14 @@ sealed class AriaDestination(val route: String) {
     object LiderDetalhesProjeto : AriaDestination("lider/projetos/{projectId}") {
         fun createRoute(projectId: String) = "lider/projetos/$projectId"
     }
+    object LiderCriarProjeto : AriaDestination("lider/criar_projeto?ideaId={ideaId}") {
+        fun createRoute(ideaId: String? = null) =
+            if (ideaId.isNullOrBlank()) "lider/criar_projeto?ideaId="
+            else "lider/criar_projeto?ideaId=$ideaId"
+    }
+    object LiderEditarProjeto : AriaDestination("lider/projetos/{projectId}/editar") {
+        fun createRoute(projectId: String) = "lider/projetos/$projectId/editar"
+    }
     object LiderDetalhesIdeia : AriaDestination("lider/ideias/{ideaId}") {
         fun createRoute(ideaId: String) = "lider/ideias/$ideaId"
     }

@@ -1,18 +1,12 @@
 package com.fiap.ariachallenge.data.remote
 
 import com.fiap.ariachallenge.data.remote.dto.IdeaDto
-import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
-import com.fiap.ariachallenge.data.remote.dto.KeyMetricInputDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
-import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationKeyMetricDto
 import com.fiap.ariachallenge.domain.model.OrientationKeyMetric
-import com.fiap.ariachallenge.data.remote.dto.MilestoneInputDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectMilestoneDto
-import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectTeamMemberDto
-import com.fiap.ariachallenge.data.remote.dto.TeamMemberInputDto
 import com.fiap.ariachallenge.data.remote.dto.UserDto
 import com.fiap.ariachallenge.domain.model.Idea
 import com.fiap.ariachallenge.domain.model.MilestoneStatus
@@ -50,10 +44,11 @@ fun UserDto.toDomain(): User = User(
     email = email,
     role = UserRole.valueOf(role),
     department = department,
-    avatarInitials = avatarInitials.orEmpty().ifBlank { name.take(2).uppercase() },
+    avatarInitials = avatarInitials.ifBlank { name.take(2).uppercase() },
     totalIdeas = totalIdeas,
     approvedIdeas = approvedIdeas,
 )
+
 fun Idea.toDto(): IdeaDto = IdeaDto(
     id = id,
     title = title,
@@ -84,21 +79,8 @@ fun IdeaDto.toDomain(): Idea = Idea(
     score = score,
     gestorFeedback = gestorFeedback,
     estimatedRoi = estimatedRoi,
-    aiScore = aiScore,
-    aiJustification = aiJustification,
-    aiAnalyzedAt = aiAnalyzedAt?.let { LocalDateTime.parse(it, dateTimeFormatter) },
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
-)
-
-// Payload real de criação/edição (POST/PUT) — só os 6 campos que o backend aceita
-fun Idea.toRequestDto(): IdeaRequestDto = IdeaRequestDto(
-    title = title,
-    category = category.name,
-    description = description,
-    problema = problema,
-    beneficios = beneficios,
-    recursos = recursos,
 )
 
 fun ProjectMilestone.toDto(): ProjectMilestoneDto = ProjectMilestoneDto(
@@ -140,35 +122,9 @@ fun Project.toDto(): ProjectDto = ProjectDto(
     strategicOrientationLabel = strategicOrientationLabel,
     teamMembers = teamMembers.map { it.toDto() },
     milestones = milestones.map { it.toDto() },
-    startDate = startDate.toLocalDate().format(dateFormatter),
-    expectedEndDate = expectedEndDate.toLocalDate().format(dateFormatter),
+    startDate = startDate.format(dateTimeFormatter),
+    expectedEndDate = expectedEndDate.format(dateTimeFormatter),
     updatedAt = updatedAt.format(dateTimeFormatter),
-)
-
-// Payload real de criacao/edicao (POST/PUT) — so os campos que ProjectRequestDto.java aceita
-fun Project.toRequestDto(): ProjectRequestDto = ProjectRequestDto(
-    title = title,
-    description = description,
-    originIdeaId = originIdea.id,
-    sponsorLabel = sponsorLabel,
-    strategicOrientationLabel = strategicOrientationLabel,
-    budget = budget,
-    estimatedRoi = estimatedRoi,
-    teamMembers = teamMembers.map { it.toInputDto() },
-    milestones = milestones.map { it.toInputDto() },
-    startDate = startDate.toLocalDate().format(dateFormatter),
-    expectedEndDate = expectedEndDate.toLocalDate().format(dateFormatter),
-)
-
-fun ProjectTeamMember.toInputDto(): TeamMemberInputDto = TeamMemberInputDto(
-    userId = user.id,
-    projectRole = projectRole,
-)
-
-fun ProjectMilestone.toInputDto(): MilestoneInputDto = MilestoneInputDto(
-    title = title,
-    dueDate = dueDate.format(dateFormatter),
-    status = status.name,
 )
 
 fun ProjectDto.toDomain(): Project = Project(
@@ -186,8 +142,8 @@ fun ProjectDto.toDomain(): Project = Project(
     strategicOrientationLabel = strategicOrientationLabel,
     teamMembers = teamMembers.map { it.toDomain() },
     milestones = milestones.map { it.toDomain() },
-    startDate = LocalDate.parse(startDate, dateFormatter).atStartOfDay(),
-    expectedEndDate = LocalDate.parse(expectedEndDate, dateFormatter).atStartOfDay(),
+    startDate = LocalDateTime.parse(startDate, dateTimeFormatter),
+    expectedEndDate = LocalDateTime.parse(expectedEndDate, dateTimeFormatter),
     updatedAt = LocalDateTime.parse(updatedAt, dateTimeFormatter),
 )
 
@@ -199,26 +155,6 @@ fun OrientationKeyMetric.toDto(): OrientationKeyMetricDto = OrientationKeyMetric
 )
 
 fun OrientationKeyMetricDto.toDomain(): OrientationKeyMetric = OrientationKeyMetric(
-    name = name,
-    achieved = achieved,
-    target = target,
-    progress = progress,
-)
-
-// Payload real de criacao/edicao (POST/PUT) — so os campos que OrientationRequestDto.java aceita
-fun Orientation.toRequestDto(): OrientationRequestDto = OrientationRequestDto(
-    code = code,
-    title = title,
-    description = description,
-    category = category.name,
-    priority = priority.name,
-    period = period,
-    targetRoles = targetRoles.map { it.name },
-    keyMetrics = keyMetrics.map { it.toInputDto() },
-    expiresAt = expiresAt?.toLocalDate()?.format(dateFormatter),
-)
-
-fun OrientationKeyMetric.toInputDto(): KeyMetricInputDto = KeyMetricInputDto(
     name = name,
     achieved = achieved,
     target = target,

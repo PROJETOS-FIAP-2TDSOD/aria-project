@@ -17,9 +17,6 @@ data class Idea(
     val score: Int? = null,
     val gestorFeedback: String? = null,
     val estimatedRoi: Double? = null,
-    val aiScore: Int? = null,
-    val aiJustification: String? = null,
-    val aiAnalyzedAt: LocalDateTime? = null,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now()
 )

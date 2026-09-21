@@ -192,12 +192,7 @@ class CriarProjetoViewModel @Inject constructor(
             )
             projectRepository.createProject(project).fold(
                 onSuccess = {
-                    ideaRepository.reviewIdea(
-                        id = originIdea.id,
-                        status = IdeaStatus.EM_PROJETO,
-                        score = originIdea.score,
-                        gestorFeedback = originIdea.gestorFeedback,
-                    )
+                    ideaRepository.updateIdea(originIdea.copy(status = IdeaStatus.EM_PROJETO))
                     _uiState.update { it.copy(isLoading = false, isSuccess = true) }
                 },
                 onFailure = { e -> _uiState.update { it.copy(isLoading = false, error = e.message) } },

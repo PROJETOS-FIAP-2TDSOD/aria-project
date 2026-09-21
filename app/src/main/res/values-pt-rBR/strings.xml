@@ -375,10 +375,6 @@
     <string name="analyze_idea_approved_create_project">Criar projeto</string>
     <string name="action_later">Agora não</string>
     <string name="analyze_idea_more_info_title">Informações adicionais</string>
-    <string name="analyze_idea_ai_score_title">Pontuação por IA</string>
-    <string name="analyze_idea_ai_score_button">Pontuar com IA</string>
-    <string name="analyze_idea_ai_score_button_retry">Pontuar novamente</string>
-    <string name="format_ai_score_value">Nota da IA: %1$d</string>
     <string name="analyze_section_resources">RECURSOS</string>
 
     <!-- Projetos -->

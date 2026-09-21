@@ -26,8 +26,6 @@ data class AnalisarIdeiaUiState(
     val isSuccess: Boolean = false,
     val approvedForProject: Boolean = false,
     val aiBrief: AiAnalyzeBrief? = null,
-    val isScoringWithAi: Boolean = false,
-    val aiScoreError: String? = null,
     val error: String? = null,
 )
 
@@ -55,18 +53,6 @@ class AnalisarIdeiaViewModel @Inject constructor(
         _uiState.update { it.copy(approvedForProject = false) }
     }
 
-    fun scoreWithAi() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isScoringWithAi = true, aiScoreError = null) }
-            ideaRepository.scoreIdeaWithAi(ideaId).fold(
-                onSuccess = { updatedIdea ->
-                    _uiState.update { it.copy(isScoringWithAi = false, idea = updatedIdea) }
-                },
-                onFailure = { e -> _uiState.update { it.copy(isScoringWithAi = false, aiScoreError = e.message) } },
-            )
-        }
-    }
-
     private fun loadIdea() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -83,12 +69,18 @@ class AnalisarIdeiaViewModel @Inject constructor(
         val idea = state.idea ?: return
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmitting = true) }
-            ideaRepository.reviewIdea(
-                id = idea.id,
+            val estimatedRoi = when {
+                newStatus != IdeaStatus.APROVADA -> idea.estimatedRoi
+                idea.estimatedRoi != null -> idea.estimatedRoi
+                else -> state.score * 2_000.0
+            }
+            val updated = idea.copy(
                 status = newStatus,
                 score = state.score,
                 gestorFeedback = state.feedback.ifBlank { null },
-            ).fold(
+                estimatedRoi = estimatedRoi,
+            )
+            ideaRepository.updateIdea(updated).fold(
                 onSuccess = {
                     _uiState.update {
                         it.copy(

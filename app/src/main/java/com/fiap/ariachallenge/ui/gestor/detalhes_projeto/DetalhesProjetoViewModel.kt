@@ -192,7 +192,10 @@ class DetalhesProjetoViewModel @Inject constructor(
                 title = state.editTitle.trim(),
                 description = state.editDescription.trim(),
                 originIdea = originIdea,
+                progress = state.editProgress,
                 estimatedRoi = estimatedRoi,
+                actualRoi = actualRoi,
+                status = state.editStatus,
                 sponsorLabel = sponsorLabels.getOrNull(state.editSponsorIndex).orEmpty(),
                 strategicOrientationLabel = orientationLabels.getOrNull(state.editOrientationIndex).orEmpty(),
                 expectedEndDate = expectedEnd,
@@ -201,17 +204,7 @@ class DetalhesProjetoViewModel @Inject constructor(
                 updatedAt = LocalDateTime.now(),
             )
             projectRepository.updateProject(updated).fold(
-                onSuccess = {
-                    projectRepository.updateProjectProgress(
-                        id = project.id,
-                        status = state.editStatus,
-                        progress = state.editProgress,
-                        actualRoi = actualRoi,
-                    ).fold(
-                        onSuccess = { saved -> applyProject(saved, roleLabels) },
-                        onFailure = { e -> _uiState.update { it.copy(isSaving = false, error = e.message) } },
-                    )
-                },
+                onSuccess = { saved -> applyProject(saved, roleLabels) },
                 onFailure = { e -> _uiState.update { it.copy(isSaving = false, error = e.message) } },
             )
         }

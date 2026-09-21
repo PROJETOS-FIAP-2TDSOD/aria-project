@@ -3,8 +3,10 @@ package com.fiap.ariachallenge.ui.lider.orientacoes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fiap.ariachallenge.domain.model.IdeaStatus
+import com.fiap.ariachallenge.domain.model.ProjectStatus
 import com.fiap.ariachallenge.domain.repository.IIdeaRepository
 import com.fiap.ariachallenge.domain.repository.IOrientationRepository
+import com.fiap.ariachallenge.domain.repository.IProjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +38,7 @@ data class OrientacoesLiderUiState(
 class OrientacoesLiderViewModel @Inject constructor(
     private val orientationRepository: IOrientationRepository,
     private val ideaRepository: IIdeaRepository,
+    private val projectRepository: IProjectRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OrientacoesLiderUiState())
@@ -49,21 +52,25 @@ class OrientacoesLiderViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                // ideasCount/projectsActive/progress ja vem calculado pelo backend
-                // (OrientationEnrichmentService) - nao precisa buscar todos os
-                // projetos nem recalcular nada aqui.
                 val orientations = orientationRepository.getAllOrientations().first()
                 val ideas = ideaRepository.getAllIdeas().first()
+                val projects = projectRepository.getAllProjects().first()
 
                 val items = orientations.mapIndexed { index, orientation ->
+                    val alignedIdeas = ideas.filter { it.category == orientation.category }
+                    val alignedProjects = projects.filter { it.originIdea.category == orientation.category }
+                    val approved = alignedIdeas.count { it.status == IdeaStatus.APROVADA || it.status == IdeaStatus.EM_PROJETO }
+                    val progress = if (alignedIdeas.isEmpty()) 0f
+                    else approved.toFloat() / alignedIdeas.size.toFloat()
+
                     OrientationListItemUi(
                         id = orientation.id,
                         code = "#${index + 1}",
                         title = orientation.title,
                         description = orientation.description,
-                        progress = orientation.progress.coerceIn(0f, 1f),
-                        ideaCount = orientation.ideasCount,
-                        projectCount = orientation.projectsActive,
+                        progress = progress.coerceIn(0f, 1f),
+                        ideaCount = alignedIdeas.size,
+                        projectCount = alignedProjects.count { it.status == ProjectStatus.EM_ANDAMENTO },
                     )
                 }
 

@@ -1,14 +1,14 @@
 package com.fiap.ariachallenge.di
 
-import com.fiap.ariachallenge.data.repository.AuthRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.fiap.ariachallenge.data.repository.FakeAiRepository
-import com.fiap.ariachallenge.data.repository.IdeaRepositoryImpl
-import com.fiap.ariachallenge.data.repository.OrientationRepositoryImpl
-import com.fiap.ariachallenge.data.repository.ProjectRepositoryImpl
+import com.fiap.ariachallenge.data.repository.FakeAuthRepository
+import com.fiap.ariachallenge.data.repository.FakeIdeaRepository
+import com.fiap.ariachallenge.data.repository.FakeOrientationRepository
+import com.fiap.ariachallenge.data.repository.FakeProjectRepository
 import com.fiap.ariachallenge.data.repository.FakeUserRepository
 import com.fiap.ariachallenge.domain.repository.IAiRepository
 import com.fiap.ariachallenge.domain.repository.IAuthRepository
@@ -28,19 +28,19 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): IAuthRepository
+    abstract fun bindAuthRepository(impl: FakeAuthRepository): IAuthRepository
 
     @Binds
     @Singleton
-    abstract fun bindIdeaRepository(impl: IdeaRepositoryImpl): IIdeaRepository
+    abstract fun bindIdeaRepository(impl: FakeIdeaRepository): IIdeaRepository
 
     @Binds
     @Singleton
-    abstract fun bindProjectRepository(impl: ProjectRepositoryImpl): IProjectRepository
+    abstract fun bindProjectRepository(impl: FakeProjectRepository): IProjectRepository
 
     @Binds
     @Singleton
-    abstract fun bindOrientationRepository(impl: OrientationRepositoryImpl): IOrientationRepository
+    abstract fun bindOrientationRepository(impl: FakeOrientationRepository): IOrientationRepository
 
     @Binds
     @Singleton

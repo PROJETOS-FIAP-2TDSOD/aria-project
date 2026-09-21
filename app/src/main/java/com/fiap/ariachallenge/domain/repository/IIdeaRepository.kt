@@ -12,7 +12,5 @@ interface IIdeaRepository {
     fun getPendingIdeas(): Flow<List<Idea>>
     suspend fun submitIdea(idea: Idea): Result<Idea>
     suspend fun updateIdea(idea: Idea): Result<Idea>
-    suspend fun reviewIdea(id: String, status: IdeaStatus, score: Int?, gestorFeedback: String?): Result<Idea>
-    suspend fun scoreIdeaWithAi(id: String): Result<Idea>
     suspend fun deleteIdea(id: String): Result<Unit>
 }
