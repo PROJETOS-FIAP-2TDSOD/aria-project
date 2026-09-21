@@ -1,6 +1,8 @@
 # ARIA — Plataforma de Gestão de Inovação Corporativa
 
-Documentação técnica do aplicativo Android, alinhada ao **Kickoff Challenge Águia Branca — Sprint 1** (`estudo/Kickoff_Challenge_AguiaBranca_Sprint1.pdf`). Descreve o que está implementado no repositório em **maio/2026**, sem suposições de backend de produção.
+Documentação técnica do aplicativo Android. Reflete o estado do repositório ao
+final da **Sprint 2 — Challenge Águia Branca (FIAP)**, com o backend real
+integrado (substituindo o mock da Sprint 1) e hospedado na nuvem.
 
 ---
 
@@ -13,39 +15,41 @@ Documentação técnica do aplicativo Android, alinhada ao **Kickoff Challenge �
 | **Objetivo** | Integrar estratégia, pessoas e execução no ciclo de inovação: ideias → análise → projetos → orientações → mensuração (ROI) |
 | **Package** | `com.fiap.ariachallenge` |
 | **Application ID** | `com.fiap.ariachallenge` |
-| **Sprint atual** | **Sprint 1** — app nativo Android com backend simulado (REST mock) |
-| **Sprint 2 (futuro)** | Backend real (Java/C#), microsserviços, persistência em nuvem |
+| **Sprint atual** | **Sprint 2** — app nativo Android integrado a um backend real (Spring Boot + MongoDB Atlas) |
+| **Backend** | `aria-backend` (repositório irmão), hospedado no **Render** — `https://aria-backend-p7bk.onrender.com` |
 
 ### Estado do projeto
 
-**MVP acadêmico funcional** com:
+**Integração completa com backend real** na Sprint 2:
 
 - UI completa em Jetpack Compose para **Operador**, **Gestor** e **Líder**
-- API REST **mockada** com Retrofit + interceptor local + JWT simulado
-- Persistência local via **DataStore** (sessão, token, contas registradas, snapshot de negócio, badges)
-- Sem Firebase, Supabase, Room ou API de produção
-- Extras: gamificação, IA simulada trilíngue, gráficos Canvas, export PDF
+- API REST **real** (Retrofit + Spring Boot), autenticação JWT de verdade
+- CRUD completo de ideias, projetos e orientações consumindo o backend
+- IA real (Google Gemini) para pontuação de ideias (`ai-score`)
+- Dashboard do líder consumindo endpoints de relatório reais
+- Notificações reais (leitura, marcar como lida)
+- Persistência local via **DataStore** apenas para sessão/token e avatar (o
+  restante dos dados de negócio vem sempre da API)
+- Sem Firebase, Supabase ou Room
+
+> A Sprint 1 (backend 100% mockado) está preservada no histórico do Git;
+> esta versão do README documenta o estado pós-integração.
 
 ---
 
-## 2. Alinhamento ao kickoff (Sprint 1)
+## 2. Alinhamento ao enunciado da Sprint 2
 
-| Requisito (PDF) | Status | Implementação |
-|-----------------|--------|-----------------|
-| App nativo Android | ✅ | Kotlin + Compose |
-| Operador: consultar orientações | ✅ | Home + detalhe read-only (`operador/orientacoes/{id}`) |
-| Operador: cadastrar ideias | ✅ | `NovaIdeiaScreen` |
-| Operador: acompanhar status | ✅ | `MinhasIdeiasScreen`, `DetalhesIdeiaScreen`, notificações |
-| Gestor: consultar orientações | ✅ | Lista + detalhe (somente leitura) |
-| Gestor: priorizar e aprovar ideias | ✅ | Fila com ordenação por score, `AnalisarIdeiaScreen` |
-| Gestor: CRUD projetos + atualizar resultados | ✅ | Criar, editar, excluir, ROI, progresso, marcos |
-| Líder: CRUD orientações | ✅ | Criar, editar, excluir |
-| Líder: consultar projetos | ✅ | Lista, detalhes (etapa, prazo, ROI, marcos) |
-| Líder: dashboard (ROI, resultados) | ✅ | Métricas, funil, gráficos, insights IA |
-| Login 3 perfis + sessão | ✅ | JWT mock + DataStore |
-| Conectividade externa efetiva | ✅ | REST mock funcional (alternativa válida ao Firebase no regulamento) |
-| Inovação aberta (ecossistema) | ❌ | Fora do escopo explícito da S1 |
-| Backend real | ❌ | Previsto para Sprint 2 |
+| Requisito | Status | Observação |
+|---|---|---|
+| Login 3 perfis, JWT real | ✅ | `AuthRepositoryImpl` |
+| Orientações: CRUD do líder, consulta dos demais | ✅ | `OrientationRepositoryImpl` |
+| Ideias: CRUD do operador (inclusive exclusão) | ✅ | `IdeaRepositoryImpl` |
+| Ideias: gestor prioriza/aprova, vincula à estratégia | ✅ | `AnalisarIdeiaViewModel` |
+| Projetos: CRUD do gestor, progresso/resultados | ✅ | `ProjectRepositoryImpl` |
+| Projetos: líder consulta (sem criar/editar) | ✅ | Acesso restrito por navegação + backend `@PreAuthorize` |
+| Dashboard do líder a partir de endpoints de relatório | ✅ | `IDashboardRepository` → `/dashboard/summary`, `/roi-by-project`, `/roi-by-strategy` |
+| Diferencial de IA (pontuação de ideias) | ✅ | Google Gemini via `ai-score`, GESTOR |
+| Backend hospedado / não depende de ambiente local | ✅ | Render + MongoDB Atlas |
 
 ---
 
@@ -53,9 +57,9 @@ Documentação técnica do aplicativo Android, alinhada ao **Kickoff Challenge �
 
 | Perfil | `UserRole` | Responsabilidades |
 |--------|------------|-------------------|
-| **Operador** | `OPERADOR` | Home, orientações (leitura), minhas ideias, nova ideia, detalhes, notificações, perfil, gamificação |
-| **Gestor** | `GESTOR` | Home, pendentes, analisar ideia, projetos (CRUD), orientações (leitura), notificações, perfil |
-| **Líder** | `LIDER` | Dashboard, orientações (CRUD), análises, tendências, projetos, notificações, perfil, export PDF |
+| **Operador** | `OPERADOR` | Home, orientações (leitura), minhas ideias (CRUD completo), nova ideia, detalhes, notificações, perfil, gamificação |
+| **Gestor** | `GESTOR` | Home, pendentes, analisar ideia (aprovar/rejeitar/pontuar via IA), projetos (CRUD), orientações (leitura), notificações, perfil |
+| **Líder** | `LIDER` | Dashboard, orientações (CRUD), análises, tendências, projetos (consulta), notificações, perfil, export PDF |
 
 Registro de novas contas cria sempre perfil **OPERADOR** e redireciona automaticamente para o home após sucesso.
 
@@ -93,7 +97,7 @@ Registro de novas contas cria sempre perfil **OPERADOR** e redireciona automatic
 
 ### Não utilizado
 
-Room, Firebase, Supabase, backend Java/C# (Sprint 2).
+Room, Firebase, Supabase.
 
 ---
 
@@ -106,7 +110,7 @@ Room, Firebase, Supabase, backend Java/C# (Sprint 2).
 ```
 ui/           → Compose screens, design system Aria, navegação por perfil
 domain/       → modelos, analytics, gamificação, interfaces de repositório
-data/         → Fake*Repository, mock, remote (API, interceptor, DTOs)
+data/         → *RepositoryImpl (real), remote (API, DTOs, mappers)
 di/           → Hilt (RepositoryModule, NetworkModule)
 util/         → localização Compose, formatação, parsers
 export/       → AriaAnalyticsPdfExporter
@@ -119,14 +123,19 @@ ViewModels chamam repositórios diretamente (sem camada `usecase/`).
 - `@HiltAndroidApp` — `AriaApplication`
 - `@AndroidEntryPoint` — `MainActivity`
 - `@HiltViewModel` — ViewModels
-- `RepositoryModule` — binds `Fake*` → `I*Repository`
-- `NetworkModule` — OkHttp, Retrofit, `AriaApiService`
+- `RepositoryModule` — binds `*RepositoryImpl` → `I*Repository`
+- `NetworkModule` — OkHttp, Retrofit, `AriaApiService`, `BASE_URL`
 
 ### State management
 
 - `MutableStateFlow` / `StateFlow` nos ViewModels
-- UI: `collectAsStateWithLifecycle()`
-- Listas: `Flow` via `InMemoryApiStore` (`ideas`, `projects`, `orientations`)
+- UI: `collectAsState()`
+- Listas: `Flow` de leitura única por chamada de API (com `.catch{}` pra não
+  derrubar a tela em erro de rede)
+- Telas com ação de criar/editar/excluir usam `DisposableEffect` +
+  `Lifecycle.Event.ON_RESUME` para recarregar ao voltar de navegação
+  (`popBackStack` mantém a mesma instância de ViewModel viva, então o
+  `init { load() }` não roda de novo sozinho)
 - Navegação one-shot: lambdas `onNavigate` / `LaunchedEffect`
 
 ### Diagrama simplificado
@@ -138,16 +147,22 @@ ViewModels chamam repositórios diretamente (sem camada `usecase/`).
                                                     │
                     ┌───────────────────────────────┴───────────────────────────────┐
                     ▼                               ▼                               ▼
-            FakeAuthRepository              FakeIdeaRepository              FakeProjectRepository
+              AuthRepositoryImpl              IdeaRepositoryImpl              ProjectRepositoryImpl
                     │                               │                               │
                     └───────────────────────────────┼───────────────────────────────┘
                                                     ▼
                                           AriaApiService (Retrofit)
                                                     ▼
-                              BearerTokenInterceptor + AriaMockApiInterceptor
+                                          BearerTokenInterceptor
                                                     ▼
-                                          InMemoryApiStore (+ DataStore snapshot)
+                              Backend real (Spring Boot) — local ou Render
+                                                    ▼
+                                          MongoDB Atlas
 ```
+
+`FakeAiRepository` (IA de apoio — insights/sugestões fora do `ai-score`) e
+parte do `UserRepositoryImpl` (avatar local, cálculo de badge-unlock)
+continuam locais por decisão de escopo — ver seção 14.
 
 ---
 
@@ -159,20 +174,20 @@ app/src/main/java/com/fiap/ariachallenge/
 ├── MainActivity.kt
 ├── data/
 │   ├── local/          UserSessionStore, AuthTokenStore, AuthAccountStore,
-│   │                   InMemoryApiDataStore, BadgeUnlockTracker, AvatarStorage
-│   ├── mock/           MockUsers, MockIdeas, MockProjects, MockOrientations,
-│   │                   MockNotifications, MockAi, LocalizedMockText
-│   ├── remote/         AriaApiService, AriaMockApiInterceptor, BearerTokenInterceptor,
-│   │                   InMemoryApiStore, AuthAccountRegistry, ApiMappers, dto/
-│   ├── repository/     FakeAuth, FakeUser, FakeIdea, FakeProject, FakeOrientation, FakeAi
-│   ├── security/       MockJwtProvider
+│   │                   BadgeUnlockTracker, AvatarStorage
+│   ├── mock/           MockAi (IA de apoio ainda simulada)
+│   ├── remote/         AriaApiService, BearerTokenInterceptor, ApiMappers, dto/
+│   ├── repository/     AuthRepositoryImpl, UserRepositoryImpl, IdeaRepositoryImpl,
+│   │                   ProjectRepositoryImpl, OrientationRepositoryImpl,
+│   │                   DashboardRepositoryImpl, FakeAiRepository
 │   └── session/        AuthSessionManager
 ├── di/                 NetworkModule.kt, RepositoryModule.kt
 ├── domain/
 │   ├── analytics/      AnalyticsMetricsCalculator
 │   ├── gamification/   GamificationCalculator, GamificationPoints, ProfileMetricsCalculator
-│   ├── model/          User, Idea, Project, Orientation, Badge, Notification, Ai*, ...
-│   └── repository/     6 interfaces I*Repository
+│   ├── model/          User, Idea, Project, Orientation, Badge, Notification,
+│   │                   DashboardSummary, ProjectRoiSummary, StrategyRoiSummary, Ai*, ...
+│   └── repository/     7 interfaces I*Repository (inclui IDashboardRepository)
 ├── export/             AriaAnalyticsPdfExporter.kt
 ├── navigation/         AriaDestinations, AriaNavGraph, *NavGraph por perfil
 ├── ui/
@@ -180,12 +195,12 @@ app/src/main/java/com/fiap/ariachallenge/
 │   ├── auth/           login, register, recover
 │   ├── components/     cards, gráficos, gamificação, avatar
 │   ├── gestor/         telas do gestor
-│   ├── lider/          telas do líder
+│   ├── lider/           telas do líder
 │   ├── operador/       telas do operador
 │   ├── splash/
-│   ├── test/           AriaTestTags
-│   └── theme/          AriaChallengeTheme, cores, tipografia
-└── util/               ComposeLocalization, MoneyFormat, Extensions, ...
+│   ├── test/            AriaTestTags
+│   └── theme/           AriaChallengeTheme, cores, tipografia
+└── util/                ComposeLocalization, MoneyFormat, Extensions, ...
 ```
 
 ---
@@ -210,7 +225,7 @@ Pós-login: `navigateToRole()` em `AriaNavGraph.kt` — `popUpTo` da rota de aut
 | Home | `operador/home` |
 | Minhas ideias | `operador/ideias` |
 | Nova ideia | `operador/nova_ideia` |
-| Detalhes ideia | `operador/ideias/{ideaId}` |
+| Detalhes ideia (com exclusão) | `operador/ideias/{ideaId}` |
 | Detalhes orientação (read-only) | `operador/orientacoes/{orientationId}` |
 | Notificações | `operador/notificacoes` |
 | Perfil | `operador/perfil` |
@@ -221,7 +236,7 @@ Pós-login: `navigateToRole()` em `AriaNavGraph.kt` — `popUpTo` da rota de aut
 |------|------|
 | Home | `gestor/home` |
 | Pendentes | `gestor/pendentes` |
-| Analisar ideia | `gestor/analisar/{ideaId}` |
+| Analisar ideia (aprovar/rejeitar/pontuar via IA) | `gestor/analisar/{ideaId}` |
 | Projetos | `gestor/projetos` |
 | Criar projeto | `gestor/criar_projeto?ideaId={ideaId}` |
 | Detalhes projeto | `gestor/projetos/{projectId}` |
@@ -231,7 +246,7 @@ Pós-login: `navigateToRole()` em `AriaNavGraph.kt` — `popUpTo` da rota de aut
 | Notificações | `gestor/notificacoes` |
 | Perfil | `gestor/perfil` |
 
-### Líder (13 destinos)
+### Líder (11 destinos)
 
 | Tela | Rota |
 |------|------|
@@ -242,13 +257,20 @@ Pós-login: `navigateToRole()` em `AriaNavGraph.kt` — `popUpTo` da rota de aut
 | Detalhes orientação | `lider/orientacoes/{orientationId}` |
 | Análises | `lider/analises` |
 | Tendências | `lider/tendencias` |
-| Projetos | `lider/projetos` |
-| Detalhes / criar / editar projeto | rotas `lider/projetos/...`, `lider/criar_projeto` |
+| Projetos (somente consulta) | `lider/projetos` |
+| Detalhes projeto (somente consulta, sem editar) | `lider/projetos/{projectId}` |
 | Detalhes ideia | `lider/ideias/{ideaId}` |
 | Notificações | `lider/notificacoes` |
 | Perfil | `lider/perfil` |
 
-Telas compartilhadas entre perfis: `DetalhesProjetoScreen`, `DetalhesIdeiaScreen`, `DetalhesOrientacaoLiderScreen` (modo `readOnly` para operador/gestor).
+> As rotas `lider/criar_projeto` e `lider/projetos/{projectId}/editar` da
+> Sprint 1 foram **removidas** — o enunciado da Sprint 2 restringe
+> criação/edição de projeto ao GESTOR, e o backend já aplicava isso
+> (`@PreAuthorize`); o app agora reflete essa regra na navegação também.
+
+Telas compartilhadas entre perfis: `DetalhesProjetoScreen` (parâmetro
+`canEdit`), `DetalhesIdeiaScreen`, `DetalhesOrientacaoLiderScreen` (parâmetro
+`readOnly`).
 
 ---
 
@@ -256,41 +278,34 @@ Telas compartilhadas entre perfis: `DetalhesProjetoScreen`, `DetalhesIdeiaScreen
 
 ### Fluxo
 
-1. Login/registro → `AriaApiService` → `AriaMockApiInterceptor`
-2. Resposta `AuthResponseDto` com `accessToken` (JWT mock) e `user`
+1. Login/registro → `AriaApiService` → backend real (`POST /auth/login` ou `/auth/register`)
+2. Resposta `AuthResponseDto` com `accessToken` (JWT real, assinado pelo backend) e `user`
 3. `AuthSessionManager.persist()` → `AuthTokenStore` + `UserSessionStore`
-4. Requests autenticados: `BearerTokenInterceptor` + validação no mock (`MockJwtProvider`)
+4. Requests autenticados: `BearerTokenInterceptor` anexa o token; validação real no backend (Spring Security + JWT filter)
+5. Token expira em 24h — login novamente após esse período
 
 ### Registro
 
-- `POST /api/v1/auth/register` — cria usuário em `AuthAccountRegistry`
-- `FakeAuthRepository` persiste sessão e retorna `User`
+- `POST /api/v1/auth/register` — cria usuário real no MongoDB
+- `AuthRepositoryImpl` persiste sessão e retorna `User`
 - `RegisterScreen` observa `registeredUserRole` e navega via `onRegistered` para o grafo do perfil
 - Papel fixo: `UserRole.OPERADOR`
 
-### Erros (códigos)
+### Recuperação de senha
 
-| Código | Uso |
-|--------|-----|
-| `ERR_INVALID_CREDENTIALS` | Login inválido |
-| `ERR_INVALID_EMAIL` | Recuperar senha |
-| `ERR_EMAIL_EXISTS` | E-mail já cadastrado |
-| `ERR_INVALID` | Payload inválido no registro |
-| `ERR_NAME`, `ERR_EMAIL`, … | Validação local no `RegisterViewModel` |
+`POST /api/v1/auth/recover-password` gera uma senha temporária real no
+backend (sem serviço de e-mail configurado nesta sprint — o "envio" é
+simulado via log do servidor).
 
-Telas mapeiam códigos para `stringResource(R.string.*)`.
+### Credenciais de teste
 
-### Credenciais demo
+Senha padrão: **`senha123`**
 
-Senha padrão: **`aria123`**
-
-| Perfil | E-mail | Usuário mock |
-|--------|--------|--------------|
-| Operador | `operador@aria.com` | `MockUsers.operador1` |
-| Gestor | `gestor@aria.com` | `MockUsers.gestor1` |
-| Líder | `lider@aria.com` | `MockUsers.lider1` |
-
-Alternativos corporativos: `rafael.costa@aguiabranca.com`, `carlos.mendes@aguiabranca.com`, `carlos.mendes.diretor@aguiabranca.com` (mesma senha).
+| Perfil | E-mail |
+|--------|--------|
+| Operador | `operador@aria.com` |
+| Gestor | `gestor@aria.com` |
+| Líder | `lider@aria.com` |
 
 ---
 
@@ -298,64 +313,58 @@ Alternativos corporativos: `rafael.costa@aguiabranca.com`, `carlos.mendes@aguiab
 
 | DataStore | Arquivo | Conteúdo |
 |-----------|---------|----------|
-| `aria_user_session` | `UserSessionStore` | JSON do `User` logado |
+| `aria_user_session` | `UserSessionStore` | JSON do `User` logado (snapshot da sessão) |
 | (token) | `AuthTokenStore` | JWT de acesso |
-| `aria_auth_accounts` | `AuthAccountStore` | Contas registradas (e-mail, senha, user) |
-| `aria_api_snapshot` | `InMemoryApiDataStore` | Snapshot de ideias, projetos, orientações |
-| `aria_badge_unlocks` | `BadgeUnlockTracker` | IDs de badges já exibidos por usuário |
-| Avatar local | `AvatarStorage` | URI/caminho de foto de perfil (operador) |
+| `aria_auth_accounts` | `AuthAccountStore` | Contas registradas localmente (fallback) |
+| `aria_badge_unlocks` | `BadgeUnlockTracker` | IDs de badges já exibidos por usuário (animação, não dado de negócio) |
+| Avatar local | `AvatarStorage` | URI/caminho de foto de perfil (operador) — não sincroniza com backend |
 
-### Comportamento ao reiniciar o app
-
-| Dado | Persiste? |
-|------|-----------|
-| Sessão + token | ✅ |
-| Contas registradas | ✅ (`AuthAccountRegistry` + `AuthAccountStore`) |
-| Ideias / projetos / orientações (CRUD) | ✅ (`InMemoryApiStore.persistSnapshot()` após mutações no interceptor) |
-| Notificações (lidas/não lidas) | ❌ RAM (`MockNotifications`) |
-| Seed inicial | Mock seed se snapshot vazio na primeira execução |
+Ideias, projetos, orientações e notificações **não têm mais snapshot local**
+— toda leitura é uma chamada de rede ao backend real, sem cache offline.
 
 ---
 
-## 10. API mock (REST)
+## 10. API real
 
 | Componente | Caminho |
 |------------|---------|
-| Base URL | `https://aria-mock.api/` |
+| Base URL (dev local) | `http://10.0.3.2:8080/` (Genymotion) ou `http://10.0.2.2:8080/` (AVD padrão) |
+| Base URL (produção / APK de entrega) | `https://aria-backend-p7bk.onrender.com/` |
 | Interface | `data/remote/AriaApiService.kt` |
-| Interceptor | `AriaMockApiInterceptor.kt` |
-| Store | `InMemoryApiStore.kt` |
 | Bearer | `BearerTokenInterceptor.kt` |
-| Rotas públicas | `AuthConfig` — login e register |
+| Backend | repositório irmão `aria-backend` (Spring Boot + MongoDB Atlas) |
 
-### Endpoints implementados
+### Endpoints consumidos
 
-| Método | Path | Ação |
-|--------|------|------|
-| POST | `/api/v1/auth/login` | Login |
-| POST | `/api/v1/auth/register` | Registro |
-| GET/POST/PUT/DELETE | `/api/v1/ideas` | CRUD ideias |
-| GET/POST/PUT/DELETE | `/api/v1/projects` | CRUD projetos |
-| GET/POST/PUT/DELETE | `/api/v1/orientations` | CRUD orientações |
+| Recurso | Rotas |
+|---|---|
+| Auth | `POST /auth/register`, `POST /auth/login`, `POST /auth/recover-password` |
+| Ideas | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `PATCH /{id}/review`, `POST /{id}/ai-score`, `DELETE /{id}` |
+| Projects | `GET`, `GET /{id}` (filtrado client-side, sem endpoint dedicado), `POST`, `PUT /{id}`, `PATCH /{id}/progress`, `DELETE /{id}` |
+| Orientations | `GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELETE /{id}` |
+| Notifications | `GET`, `PATCH /{id}/read`, `PATCH /read-all` |
+| Users | `GET /me`, `GET`, `GET /{id}` |
+| Dashboard | `GET /dashboard/summary`, `GET /dashboard/roi-by-strategy`, `GET /dashboard/roi-by-project` |
 
-Mutações que alteram store disparam `persistSnapshot()` quando `shouldPersist()` retorna true.
-
-Repositórios `Fake*` usam `delay()` para simular latência de rede.
+Especificação completa de payload/resposta de cada endpoint está na
+apresentação de entrega (e no README do `aria-backend`).
 
 ---
 
 ## 11. Repositórios
 
-| Interface | Implementação | Funções principais |
-|-----------|---------------|-------------------|
-| `IAuthRepository` | `FakeAuthRepository` | login, register, logout, getCurrentUser, recoverPassword |
-| `IUserRepository` | `FakeUserRepository` | usuário atual, notificações, usuários para equipe de projeto |
-| `IIdeaRepository` | `FakeIdeaRepository` | CRUD + queries por autor/status/pendentes |
-| `IProjectRepository` | `FakeProjectRepository` | listagem, create, update, **delete** |
-| `IOrientationRepository` | `FakeOrientationRepository` | CRUD orientações |
-| `IAiRepository` | `FakeAiRepository` | insights, score, timeline, bundle de análises |
+| Interface | Implementação | Status |
+|-----------|---------------|--------|
+| `IAuthRepository` | `AuthRepositoryImpl` | Real |
+| `IUserRepository` | `UserRepositoryImpl` | Real (perfil, listagem, busca, notificações); avatar e cálculo de badge-unlock continuam locais |
+| `IIdeaRepository` | `IdeaRepositoryImpl` | Real |
+| `IProjectRepository` | `ProjectRepositoryImpl` | Real |
+| `IOrientationRepository` | `OrientationRepositoryImpl` | Real |
+| `IDashboardRepository` | `DashboardRepositoryImpl` | Real |
+| `IAiRepository` | `FakeAiRepository` | Simulado (decisão de escopo — ver seção 14) |
 
-`deleteIdea` existe na API/repositório, mas **não há fluxo na UI** para o operador/gestor excluir ideias.
+`deleteIdea` agora tem fluxo completo na UI: ícone de exclusão em
+`DetalhesIdeiaScreen`, visível apenas para o autor da ideia.
 
 ---
 
@@ -365,16 +374,14 @@ Repositórios `Fake*` usam `delay()` para simular latência de rede.
 
 | Nível | Campos |
 |-------|--------|
-| **Ideia** | `estimatedRoi: Double?` (na análise) |
+| **Ideia** | `estimatedRoi: Double?` (não persistido na aprovação — ROI é conceito de Projeto/Dashboard, não de Ideia) |
 | **Projeto** | `estimatedRoi`, `actualRoi`, `budget`, `progress` |
-| **Orientação** | `roiCompact`, `roiDeltaPercent` (enriquecidos por `OrientationEnricher`) |
+| **Orientação** | `roiCompact`, `roiDeltaPercent`, `ideasCount`, `projectsActive` — **calculados pelo backend** (`OrientationEnrichmentService`), não mais localmente |
 
 ### Dashboard do líder
 
-- **ROI acumulado:** soma `(actualRoi ?: estimatedRoi)` de todos os projetos
-- **Série mensal:** `AnalyticsMetricsCalculator.monthlyRoiSeries()` — soma ROI dos projetos com `startDate` no mês
-- **Deltas:** calculados mês a mês (`monthMetricDeltas`), não hardcoded
-- **Funil:** submetidas → aprovadas → em projeto → concluídas
+- **Resumo (submetidas, aprovadas, taxa de conversão, ROI total, top 5 projetos):** vem de `GET /dashboard/summary` e `GET /dashboard/roi-by-project`, com fallback para cálculo local se a API falhar
+- **Distribuição por categoria e série mensal de ROI:** continuam calculadas no cliente (sem endpoint dedicado no backend para isso)
 - **Gráficos:** `InteractiveSparkline`, `DonutChart`, `BarChart` (Canvas Compose)
 
 ### Formulários gestor/líder
@@ -391,20 +398,25 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 
 | Item | Detalhe |
 |------|---------|
-| Badges | 5 (`Badge` enum): primeira ideia, 5 ideias, aprovada, high score, em projeto |
-| Pontos | `GamificationCalculator` + `GamificationPoints` |
+| Badges | 5 tipos: primeira ideia, 5 ideias, aprovada, high score, em projeto |
+| Pontos / badges (exibição) | Calculados pelo **backend** (`GamificationService`), expostos via `GET /users/me` |
+| Animação de conquista | `BadgeUnlockTracker` (local) — evita repetir a celebração, cálculo do "o que é novo" continua local |
 | UI | `GamificationCards`, `BadgeDisplay`, `BadgeUnlockCelebration` |
-| Persistência | `BadgeUnlockTracker` — evita repetir animação de conquista |
 | Perfil operador | Pontos, badges, avatar editável (`EditableProfileAvatar` + Coil) |
 
 ---
 
-## 14. IA simulada
+## 14. IA — real e simulada
 
-- `FakeAiRepository` + `MockAi.kt`
-- Textos **en / pt / es** via `LocalizedMockText`
-- Por perfil: sugestões (operador), score/brief (gestor), insights e previsões (líder)
-- Não há modelo de ML real — regras e textos mockados
+| Funcionalidade | Status | Onde |
+|---|---|---|
+| **Pontuação de ideias (`ai-score`)** | **Real** — Google Gemini API, via backend | Botão "Pontuar com IA" em `AnalisarIdeiaScreen`, GESTOR |
+| Sugestões/insights complementares (brief de score, insights do dashboard, chat assistente) | Simulado | `FakeAiRepository` + `MockAi.kt`, textos en/pt/es via `LocalizedMockText` |
+
+Decisão de escopo: o diferencial de IA do enunciado (uma das 3 opções
+oficiais) foi implementado de ponta a ponta via `ai-score`; os demais 8
+métodos de `IAiRepository` seguem mockados — fora do escopo obrigatório da
+Sprint 2, mantidos como estavam desde a Sprint 1.
 
 ---
 
@@ -414,21 +426,12 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 
 `res/xml/locales_config.xml`: **en**, **pt-BR**, **es**
 
-| Arquivo | Chaves |
-|---------|--------|
-| `values/strings.xml` | 636 |
-| `values/strings_i18n_completion.xml` | 199 |
-| **Total EN** | **835** |
-| **Total PT-BR** | **835** |
-| **Total ES** | **835** |
-
 **Idioma padrão:** inglês (`values/` sem sufixo).
 
 ### Uso no código
 
 - UI: `stringResource(R.string.*)`
 - Enums: `@StringRes` + `ComposeLocalization.kt` (`localizedName()`)
-- Mocks de conteúdo (`MockIdeas`, notificações): **português fixo** nos títulos/descrições principais
 - Moeda: `MoneyFormat` / tooltips com **R$** (contexto Águia Branca)
 
 ---
@@ -455,20 +458,7 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 
 ---
 
-## 17. Dados mock (seed)
-
-| Arquivo | Quantidade |
-|---------|------------|
-| `MockUsers.kt` | 7 usuários (4 operadores, 2 gestores, 1 líder) |
-| `MockIdeas.kt` | 10 ideias |
-| `MockProjects.kt` | 5 projetos |
-| `MockOrientations.kt` | 5 orientações |
-| `MockNotifications.kt` | 7 notificações |
-| `MockAi.kt` | Insights/sugestões localizados |
-
----
-
-## 18. ViewModels (26)
+## 17. ViewModels (26)
 
 | ViewModel | Tela principal |
 |-----------|----------------|
@@ -479,13 +469,13 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 | `HomeOperadorViewModel` | Home operador |
 | `MinhasIdeiasViewModel` | Minhas ideias |
 | `NovaIdeiaViewModel` | Nova ideia |
-| `DetalhesIdeiaViewModel` | Detalhes ideia |
+| `DetalhesIdeiaViewModel` | Detalhes ideia (inclui exclusão) |
 | `NotificacoesViewModel` | Notificações |
 | `PerfilOperadorViewModel` | Perfil operador |
 | `BadgeCelebrationViewModel` | Celebração de badge |
 | `HomeGestorViewModel` | Home gestor |
 | `PendentesViewModel` | Pendentes |
-| `AnalisarIdeiaViewModel` | Analisar ideia |
+| `AnalisarIdeiaViewModel` | Analisar ideia (aprovar/rejeitar/pontuar via IA) |
 | `ProjetosViewModel` | Projetos |
 | `CriarProjetoViewModel` | Criar projeto |
 | `DetalhesProjetoViewModel` | Detalhes/editar/excluir projeto |
@@ -501,7 +491,7 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 
 ---
 
-## 19. Testes
+## 18. Testes
 
 ### Unitários (`app/src/test/`)
 
@@ -510,7 +500,7 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 | `LoginViewModelTest.kt` | Validação e login |
 | `RegisterViewModelTest.kt` | Validação e registro |
 | `UserSessionJsonTest.kt` | Serialização de sessão |
-| `GamificationCalculatorTest.kt` | Pontos e badges |
+| `GamificationCalculatorTest.kt` | Pontos e badges (cálculo local remanescente) |
 | `ExampleUnitTest.kt` | Placeholder |
 
 ### Instrumentados (`app/src/androidTest/`)
@@ -520,10 +510,6 @@ ROI na UI em **milhares (K)** → multiplicado por `1000` ao salvar.
 | `LoginScreenInstrumentedTest.kt` | UI de login + tags |
 | `ExampleInstrumentedTest.kt` | Placeholder |
 
-### Test tags (`AriaTestTags.kt`)
-
-`LoginEmail`, `LoginPassword`, `LoginSubmit`, `RegisterName`, `RegisterEmail`, `RegisterSubmit`, `NovaIdeiaTitle`, `NovaIdeiaSubmit`, `DashboardScreen`
-
 ```bash
 gradlew test
 gradlew connectedAndroidTest
@@ -531,37 +517,17 @@ gradlew connectedAndroidTest
 
 ---
 
-## 20. Dependências (`app/build.gradle.kts`)
-
-```kotlin
-dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.coil.compose)
-    // ... ver libs.versions.toml
-}
-```
-
----
-
-## 21. Como executar
+## 19. Como executar
 
 ### Pré-requisitos
 
 - Android Studio (Ladybug ou superior)
 - JDK 11+
 - SDK Android 36
-- Emulador ou dispositivo API 26+
+- Emulador (Genymotion recomendado) ou dispositivo físico API 26+
+- Backend rodando — local (`aria-backend`, ver README do backend) **ou**
+  apontando para o backend hospedado no Render (já configurado no
+  `NetworkModule.kt` na hora de gerar o APK de entrega)
 
 ### Build e run
 
@@ -576,73 +542,50 @@ gradlew.bat test
 
 No Android Studio: Sync Gradle → módulo `app` → Run.
 
+### Trocar o backend de destino
+
+Em `di/NetworkModule.kt`, ajuste `BASE_URL`:
+- Desenvolvimento local via Genymotion: `http://10.0.3.2:8080/`
+- Desenvolvimento local via AVD padrão: `http://10.0.2.2:8080/`
+- Produção (APK de entrega): `https://aria-backend-p7bk.onrender.com/`
+
 ---
 
-## 22. Checklist de implementação
+## 20. Checklist de implementação
 
 | Funcionalidade | Status | Observação |
 |----------------|--------|------------|
-| Login / Logout | ✅ | JWT mock + sessão DataStore |
-| Registro | ✅ | API mock, sessão, auto-navegação; papel OPERADOR |
-| Recuperar senha | ✅ | Mock com `ERR_INVALID_EMAIL` |
-| CRUD Ideias | ✅ | API; UI sem delete de ideia |
-| Analisar ideias (gestor) | ✅ | Aprovar/rejeitar, score, feedback, ROI estimado |
-| CRUD Projetos | ✅ | Create, update, **delete** |
-| CRUD Orientações | ✅ | Líder CRUD; gestor/operador leitura |
-| Dashboard líder | ✅ | Métricas reais, funil, ROI, gráficos |
+| Login / Logout | ✅ | JWT real + sessão DataStore |
+| Registro | ✅ | Backend real, sessão, auto-navegação; papel OPERADOR |
+| Recuperar senha | ✅ | Backend real, senha temporária gerada de verdade |
+| CRUD Ideias | ✅ | Backend real, **inclui exclusão pela UI** |
+| Analisar ideias (gestor) | ✅ | Aprovar/rejeitar, score, feedback, **pontuação por IA real** |
+| CRUD Projetos | ✅ | Create, update, delete, progresso, marcos, equipe — tudo real |
+| CRUD Orientações | ✅ | Líder CRUD; gestor/operador leitura — backend real |
+| Dashboard líder | ✅ | Consumindo endpoints reais de relatório |
 | Gráficos / Analytics | ✅ | Canvas + PDF export |
-| Gamificação | ✅ | Badges, pontos, celebração |
-| Notificações | ⚠️ | Lista mock; estado lido só em RAM |
-| i18n UI (EN/PT/ES) | ✅ | 835 strings por locale |
-| i18n conteúdo mock | ⚠️ | Ideias/notificações em PT fixo |
-| Persistência sessão + contas + negócio | ✅ | DataStore |
-| Persistência notificações | ❌ | RAM |
-| API real / Firebase | ❌ | Sprint 2 |
-| Testes automatizados | ⚠️ | Cobertura básica (auth, gamificação, sessão) |
+| Gamificação | ✅ | Pontos/badges reais (backend), animação local |
+| Notificações | ✅ | Backend real, leitura e marcação persistidas |
+| i18n UI (EN/PT/ES) | ✅ | Strings por locale |
+| Persistência sessão + avatar | ✅ | DataStore |
+| API real | ✅ | Sprint 2 |
+| Backend hospedado (Render + Atlas) | ✅ | Não depende de ambiente local para rodar o APK de entrega |
+| Testes automatizados | ⚠️ | Cobertura básica (auth, gamificação, sessão) — não expandida na Sprint 2 |
 
 ---
 
-## 23. Limitações conhecidas
+## 21. Limitações conhecidas
 
-1. **Backend simulado** — sem rede externa real; adequado à Sprint 1.
-2. **Notificações** não persistem entre sessões.
-3. **Conteúdo mock** (títulos de ideias, etc.) em português independente do locale do sistema.
+1. **Avatar de perfil** não sincroniza com o backend — permanece local ao dispositivo.
+2. **Membros de equipe de projeto**: a lista vem real de `GET /users`, mas ainda não há tela de gestão de usuários além de perfil/listagem.
+3. **IA complementar** (insights de dashboard, chat assistente, brief detalhado) continua simulada — só a pontuação de ideias (`ai-score`) é real, por decisão de escopo.
 4. **Registro** sempre cria operador — sem escolha de perfil.
-5. **Exclusão de ideias** só na camada API, sem tela.
-6. **Inovação aberta** (ecossistema externo) não modelada no app.
-7. **Acessibilidade** parcial — alguns ícones decorativos sem `contentDescription`.
+5. **Mensagens de erro de rede** em algumas listas ainda aparecem como "vazio" em vez de uma mensagem específica de falha (polimento de UX pendente).
+6. **Acessibilidade** parcial — alguns ícones decorativos sem `contentDescription`.
 
 ---
 
-## 24. Sprint 2 (roadmap)
-
-Conforme kickoff e `arquitetura_aguiabranca.html` (referência da equipe):
-
-- Backend Java/C# com APIs reais
-- Autenticação e autorização por nível no servidor
-- Substituir `Fake*Repository` por implementações HTTP
-- Persistência em PostgreSQL / MongoDB por microsserviço
-- IA com serviço dedicado (opcional)
-- Mesmas telas Compose — troca na camada `data/`
-
----
-
-## 25. Métricas do código
-
-| Métrica | Valor (aprox.) |
-|---------|----------------|
-| Arquivos `.kt` em `main` | 180 |
-| Linhas Kotlin em `main` | ~20.660 |
-| `@Composable` | ~230 |
-| ViewModels | 26 |
-| Screens (`*Screen.kt`) | 27 |
-| Componentes `ui/components/` | 27 |
-| Primitivos `ui/aria/` | 9 |
-| Strings por locale | 835 |
-
----
-
-## 26. Referência rápida — rotas
+## 22. Referência rápida — rotas
 
 <details>
 <summary>Lista completa de rotas</summary>
@@ -653,10 +596,10 @@ Conforme kickoff e `arquitetura_aguiabranca.html` (referência da equipe):
 
 **Gestor:** `gestor/home`, `gestor/pendentes`, `gestor/analisar/{ideaId}`, `gestor/projetos`, `gestor/criar_projeto`, `gestor/projetos/{projectId}`, `gestor/projetos/{projectId}/editar`, `gestor/orientacoes`, `gestor/orientacoes/{orientationId}`, `gestor/notificacoes`, `gestor/perfil`
 
-**Líder:** `lider/dashboard`, `lider/orientacoes`, `lider/criar_orientacao`, `lider/orientacoes/{orientationId}`, `lider/orientacoes/{orientationId}/editar`, `lider/analises`, `lider/tendencias`, `lider/projetos`, `lider/projetos/{projectId}`, `lider/criar_projeto`, `lider/projetos/{projectId}/editar`, `lider/ideias/{ideaId}`, `lider/notificacoes`, `lider/perfil`
+**Líder:** `lider/dashboard`, `lider/orientacoes`, `lider/criar_orientacao`, `lider/orientacoes/{orientationId}`, `lider/orientacoes/{orientationId}/editar`, `lider/analises`, `lider/tendencias`, `lider/projetos`, `lider/projetos/{projectId}`, `lider/ideias/{ideaId}`, `lider/notificacoes`, `lider/perfil`
 
 </details>
 
 ---
 
-*Documentação gerada a partir do código-fonte. Para requisitos de negócio completos, consulte `estudo/Kickoff_Challenge_AguiaBranca_Sprint1.pdf`.*
+*Documentação gerada a partir do código-fonte ao final da Sprint 2.*
