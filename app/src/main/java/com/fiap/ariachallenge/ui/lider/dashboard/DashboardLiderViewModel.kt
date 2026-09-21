@@ -10,6 +10,7 @@ import com.fiap.ariachallenge.domain.model.IdeaCategory
 import com.fiap.ariachallenge.domain.model.IdeaStatus
 import com.fiap.ariachallenge.domain.model.Project
 import com.fiap.ariachallenge.domain.model.ProjectStatus
+import com.fiap.ariachallenge.domain.model.StrategyRoiSummary
 import com.fiap.ariachallenge.domain.model.User
 import com.fiap.ariachallenge.domain.analytics.AnalyticsMetricsCalculator
 import com.fiap.ariachallenge.domain.repository.IAiRepository
@@ -79,6 +80,7 @@ data class DashboardLiderUiState(
     val roiAccumulated: Double = 0.0,
     val categoryDistribution: List<CategoryShare> = emptyList(),
     val topProjects: List<TopProjectUi> = emptyList(),
+    val strategyRoi: List<StrategyRoiSummary> = emptyList(),
     val funnel: List<FunnelStepUi> = emptyList(),
     val aiInsights: List<AiInsightUi> = emptyList(),
 )
@@ -146,6 +148,7 @@ class DashboardLiderViewModel @Inject constructor(
                 // categoria e a serie mensal de ROI, que nao tem endpoint dedicado.
                 val summary = dashboardRepository.getSummary().getOrNull()
                 val roiByProject = dashboardRepository.getRoiByProject().getOrDefault(emptyList())
+                val roiByStrategy = dashboardRepository.getRoiByStrategy().getOrDefault(emptyList())
 
                 val submitted = summary?.ideasSubmetidas
                     ?: ideas.size
@@ -216,6 +219,7 @@ class DashboardLiderViewModel @Inject constructor(
                             roiAccumulated = totalRoi,
                             categoryDistribution = categoryDistribution,
                             topProjects = topWithScale,
+                            strategyRoi = roiByStrategy.sortedByDescending { it.roiDeltaPercent },
                             funnel = listOf(
                                 FunnelStepUi(R.string.dashboard_funnel_submitted, submitted, 100),
                                 FunnelStepUi(
