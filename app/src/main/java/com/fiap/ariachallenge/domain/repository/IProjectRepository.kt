@@ -10,5 +10,6 @@ interface IProjectRepository {
     fun getProjectsByStatus(status: ProjectStatus): Flow<List<Project>>
     suspend fun createProject(project: Project): Result<Project>
     suspend fun updateProject(project: Project): Result<Project>
+    suspend fun updateProjectProgress(id: String, status: ProjectStatus, progress: Int, actualRoi: Double?): Result<Project>
     suspend fun deleteProject(id: String): Result<Unit>
 }

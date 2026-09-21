@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,13 +37,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.fiap.ariachallenge.R
 import com.fiap.ariachallenge.navigation.AriaDestination
 import com.fiap.ariachallenge.ui.aria.AriaBottomNav
 import com.fiap.ariachallenge.ui.aria.AriaEmptyState
 import com.fiap.ariachallenge.ui.aria.AriaCard
+import com.fiap.ariachallenge.ui.aria.AriaErrorState
 import com.fiap.ariachallenge.ui.aria.AriaFab
 import com.fiap.ariachallenge.ui.aria.AriaHairline
+import com.fiap.ariachallenge.ui.aria.AriaLoadingSkeleton
 import com.fiap.ariachallenge.ui.aria.AriaNotificationBell
 import com.fiap.ariachallenge.ui.aria.AriaProgressLine
 import com.fiap.ariachallenge.ui.lider.liderBottomNavItems
@@ -60,6 +66,17 @@ fun OrientacoesLiderScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val c = AriaTheme.colors
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     Scaffold(
         containerColor = c.bgPrimary,
@@ -104,14 +121,18 @@ fun OrientacoesLiderScreen(
         },
         floatingActionButton = { AriaFab(onClick = onCreateClick) },
     ) { padding ->
-        if (uiState.items.isEmpty()) {
-            AriaEmptyState(
+        when {
+            uiState.isLoading -> AriaLoadingSkeleton(modifier = Modifier.padding(padding).padding(20.dp))
+            uiState.error != null -> AriaErrorState(
+                onRetry = viewModel::refresh,
+                modifier = Modifier.padding(padding).padding(20.dp),
+            )
+            uiState.items.isEmpty() -> AriaEmptyState(
                 title = stringResource(R.string.state_empty_orientations_title),
                 sub = stringResource(R.string.state_empty_orientations_lider_description),
                 modifier = Modifier.padding(padding).fillMaxSize(),
             )
-        } else {
-            LazyColumn(
+            else -> LazyColumn(
                 modifier = Modifier.padding(padding).fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),

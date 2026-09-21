@@ -33,7 +33,6 @@ import com.fiap.ariachallenge.ui.aria.AriaBottomNav
 import com.fiap.ariachallenge.ui.aria.AriaCard
 import com.fiap.ariachallenge.ui.aria.AriaEmptyState
 import com.fiap.ariachallenge.ui.aria.AriaErrorState
-import com.fiap.ariachallenge.ui.aria.AriaFab
 import com.fiap.ariachallenge.ui.aria.AriaLoadingSkeleton
 import com.fiap.ariachallenge.ui.aria.AriaPillLabel
 import com.fiap.ariachallenge.ui.aria.AriaProgressLine
@@ -50,7 +49,6 @@ fun ProjetosLiderScreen(
     currentRoute: String,
     onNavigate: (String) -> Unit,
     onNavigateToDetalhes: (String) -> Unit,
-    onNavigateToCriarProjeto: () -> Unit,
     viewModel: ProjetosViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -84,7 +82,6 @@ fun ProjetosLiderScreen(
                 onSelect = onNavigate,
             )
         },
-        floatingActionButton = { AriaFab(onClick = onNavigateToCriarProjeto) },
     ) { padding ->
         var selectedTab by remember { mutableIntStateOf(0) }
         val tabLabels = listOf(
@@ -122,8 +119,6 @@ fun ProjetosLiderScreen(
                             R.string.projects_empty_category_sub
                         },
                     ),
-                    cta = stringResource(R.string.projects_new),
-                    onCta = onNavigateToCriarProjeto,
                     modifier = Modifier.padding(20.dp),
                 )
                 else -> LazyColumn(
