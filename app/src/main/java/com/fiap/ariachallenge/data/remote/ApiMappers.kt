@@ -53,6 +53,8 @@ fun User.toDto(): UserDto = UserDto(
     avatarInitials = avatarInitials,
     totalIdeas = totalIdeas,
     approvedIdeas = approvedIdeas,
+    points = points,
+    badges = badges,
 )
 
 fun UserDto.toDomain(): User = User(
@@ -64,6 +66,8 @@ fun UserDto.toDomain(): User = User(
     avatarInitials = avatarInitials.orEmpty().ifBlank { name.take(2).uppercase() },
     totalIdeas = totalIdeas,
     approvedIdeas = approvedIdeas,
+    points = points,
+    badges = badges,
 )
 fun Idea.toDto(): IdeaDto = IdeaDto(
     id = id,

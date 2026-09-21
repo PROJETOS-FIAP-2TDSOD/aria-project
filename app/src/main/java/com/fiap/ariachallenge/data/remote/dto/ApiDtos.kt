@@ -9,6 +9,8 @@ data class UserDto(
     val avatarInitials: String? = null,
     val totalIdeas: Int = 0,
     val approvedIdeas: Int = 0,
+    val points: Int = 0,
+    val badges: List<String> = emptyList(),
 )
 
 data class IdeaDto(
