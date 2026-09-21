@@ -15,9 +15,7 @@ import com.fiap.ariachallenge.ui.lider.orientacoes.OrientacoesLiderScreen
 import com.fiap.ariachallenge.ui.lider.perfil.PerfilLiderScreen
 import com.fiap.ariachallenge.ui.lider.projetos.ProjetosLiderScreen
 import com.fiap.ariachallenge.ui.lider.tendencias.TendenciasScreen
-import com.fiap.ariachallenge.ui.gestor.criar_projeto.CriarProjetoScreen
 import com.fiap.ariachallenge.ui.gestor.detalhes_projeto.DetalhesProjetoScreen
-import com.fiap.ariachallenge.ui.gestor.editar_projeto.EditarProjetoScreen
 import com.fiap.ariachallenge.ui.operador.detalhes_ideia.DetalhesIdeiaScreen
 import com.fiap.ariachallenge.ui.operador.notificacoes.NotificacoesScreen
 
@@ -73,20 +71,7 @@ fun NavGraphBuilder.liderNavGraph(
                 currentRoute = AriaDestination.LiderProjetos.route,
                 onNavigate = { navController.navigate(it) { launchSingleTop = true } },
                 onNavigateToDetalhes = { id -> navController.navigate(AriaDestination.LiderDetalhesProjeto.createRoute(id)) },
-                onNavigateToCriarProjeto = { navController.navigate(AriaDestination.LiderCriarProjeto.createRoute()) },
             )
-        }
-
-        composable(
-            route = AriaDestination.LiderCriarProjeto.route,
-            arguments = listOf(
-                navArgument("ideaId") {
-                    type = NavType.StringType
-                    defaultValue = ""
-                },
-            ),
-        ) {
-            CriarProjetoScreen(onBack = { navController.popBackStack() })
         }
 
         composable(
@@ -95,18 +80,8 @@ fun NavGraphBuilder.liderNavGraph(
         ) {
             DetalhesProjetoScreen(
                 onBack = { navController.popBackStack() },
-                onEdit = {
-                    val projectId = it.arguments?.getString("projectId").orEmpty()
-                    navController.navigate(AriaDestination.LiderEditarProjeto.createRoute(projectId))
-                },
+                canEdit = false,
             )
-        }
-
-        composable(
-            route = AriaDestination.LiderEditarProjeto.route,
-            arguments = listOf(navArgument("projectId") { type = NavType.StringType }),
-        ) {
-            EditarProjetoScreen(onBack = { navController.popBackStack() })
         }
 
         composable(
