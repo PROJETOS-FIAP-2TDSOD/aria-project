@@ -6,7 +6,9 @@ import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
 import com.fiap.ariachallenge.data.remote.dto.IdeaReviewDto
 import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
 import com.fiap.ariachallenge.data.remote.dto.MessageResponseDto
+import com.fiap.ariachallenge.data.remote.dto.KeyMetricInputDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
+import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectUpdateProgressDto
@@ -69,11 +71,14 @@ interface AriaApiService {
     @GET("api/v1/orientations")
     suspend fun getOrientations(): List<OrientationDto>
 
+    @GET("api/v1/orientations/{id}")
+    suspend fun getOrientationById(@Path("id") id: String): OrientationDto
+
     @POST("api/v1/orientations")
-    suspend fun createOrientation(@Body orientation: OrientationDto): OrientationDto
+    suspend fun createOrientation(@Body orientation: OrientationRequestDto): OrientationDto
 
     @PUT("api/v1/orientations/{id}")
-    suspend fun updateOrientation(@Path("id") id: String, @Body orientation: OrientationDto): OrientationDto
+    suspend fun updateOrientation(@Path("id") id: String, @Body orientation: OrientationRequestDto): OrientationDto
 
     @DELETE("api/v1/orientations/{id}")
     suspend fun deleteOrientation(@Path("id") id: String)

@@ -2,7 +2,9 @@ package com.fiap.ariachallenge.data.remote
 
 import com.fiap.ariachallenge.data.remote.dto.IdeaDto
 import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
+import com.fiap.ariachallenge.data.remote.dto.KeyMetricInputDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
+import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationKeyMetricDto
 import com.fiap.ariachallenge.domain.model.OrientationKeyMetric
 import com.fiap.ariachallenge.data.remote.dto.MilestoneInputDto
@@ -197,6 +199,26 @@ fun OrientationKeyMetric.toDto(): OrientationKeyMetricDto = OrientationKeyMetric
 )
 
 fun OrientationKeyMetricDto.toDomain(): OrientationKeyMetric = OrientationKeyMetric(
+    name = name,
+    achieved = achieved,
+    target = target,
+    progress = progress,
+)
+
+// Payload real de criacao/edicao (POST/PUT) — so os campos que OrientationRequestDto.java aceita
+fun Orientation.toRequestDto(): OrientationRequestDto = OrientationRequestDto(
+    code = code,
+    title = title,
+    description = description,
+    category = category.name,
+    priority = priority.name,
+    period = period,
+    targetRoles = targetRoles.map { it.name },
+    keyMetrics = keyMetrics.map { it.toInputDto() },
+    expiresAt = expiresAt?.toLocalDate()?.format(dateFormatter),
+)
+
+fun OrientationKeyMetric.toInputDto(): KeyMetricInputDto = KeyMetricInputDto(
     name = name,
     achieved = achieved,
     target = target,
