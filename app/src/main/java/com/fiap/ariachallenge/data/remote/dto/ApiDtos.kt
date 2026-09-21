@@ -171,3 +171,61 @@ data class NotificationDto(
     val relatedIdeaId: String? = null,
     val createdAt: String,
 )
+
+data class IndicadorEstrategicoDto(
+    val orientationId: String,
+    val orientationTitle: String,
+    val name: String,
+    val achieved: String,
+    val target: String,
+    val progress: Float = 0f,
+)
+
+data class DashboardResumoDto(
+    val ideasSubmetidas: Int = 0,
+    val ideasAprovadas: Int = 0,
+    val ideasEmAnalise: Int = 0,
+    val ideasEmProjeto: Int = 0,
+    val taxaAprovacaoPercent: Int = 0,
+    val taxaConversaoPercent: Int = 0,
+    val projetosPlanejamento: Int = 0,
+    val projetosEmAndamento: Int = 0,
+    val projetosConcluidos: Int = 0,
+    val projetosSuspensos: Int = 0,
+    val projetosCancelados: Int = 0,
+    val projetosNoPrazo: Int = 0,
+    val projetosAtrasados: Int = 0,
+    val investimentoTotal: Double = 0.0,
+    val roiTotal: Double = 0.0,
+    val lucroTotal: Double = 0.0,
+    val investimentoTotalCompact: String = "0",
+    val roiTotalCompact: String = "0",
+    val lucroTotalCompact: String = "0",
+    val roiDeltaPercent30d: Int = 0,
+    val indicadoresEstrategicos: List<IndicadorEstrategicoDto> = emptyList(),
+)
+
+data class DashboardEstrategiaRoiDto(
+    val orientationId: String,
+    val titulo: String,
+    val categoria: String,
+    val ideasCount: Int = 0,
+    val projetosAtivos: Int = 0,
+    val roiCompact: String = "0",
+    val roiDeltaPercent: Int = 0,
+    val progresso: Float = 0f,
+)
+
+data class DashboardProjetoRoiDto(
+    val projectId: String,
+    val titulo: String,
+    val status: String,
+    val progresso: Int = 0,
+    val investimento: Double = 0.0,
+    val roi: Double = 0.0,
+    val lucro: Double = 0.0,
+    val roiCompact: String = "0",
+    val dataInicio: String,
+    val prazoFinal: String,
+    val atrasado: Boolean = false,
+)
