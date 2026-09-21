@@ -6,6 +6,7 @@ import com.fiap.ariachallenge.domain.model.User
 
 interface IUserRepository {
     fun getCurrentUser(): Flow<User>
+    suspend fun refreshCurrentUser(): Result<User>
     fun getProjectAssignableUsers(): Flow<List<User>>
     fun getUserById(id: String): Flow<User?>
     fun getNotifications(userId: String): Flow<List<Notification>>

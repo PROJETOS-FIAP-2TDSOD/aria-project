@@ -1,6 +1,5 @@
 package com.fiap.ariachallenge.data.repository
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -10,7 +9,6 @@ import com.fiap.ariachallenge.data.local.AvatarStorage
 import com.fiap.ariachallenge.data.remote.AriaApiService
 import com.fiap.ariachallenge.data.remote.toDomain
 import com.fiap.ariachallenge.data.session.AuthSessionManager
-import com.fiap.ariachallenge.data.mock.MockUsers
 import com.fiap.ariachallenge.data.remote.InMemoryApiStore
 import com.fiap.ariachallenge.domain.gamification.GamificationCalculator
 import com.fiap.ariachallenge.domain.model.Idea
@@ -22,7 +20,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FakeUserRepository @Inject constructor(
+class UserRepositoryImpl @Inject constructor(
     private val authSessionManager: AuthSessionManager,
     private val avatarStorage: AvatarStorage,
     private val store: InMemoryApiStore,
@@ -48,14 +46,24 @@ class FakeUserRepository @Inject constructor(
 
     override fun getCurrentUser(): Flow<User> = _currentUser.filterNotNull()
 
-    override fun getProjectAssignableUsers(): Flow<List<User>> = flow {
-        emit(MockUsers.allUsers.filter { it.role != UserRole.LIDER })
+    // GET /users/me - atualiza a sessao com pontos/badges/contadores frescos do
+    // backend. Quem ja observa getCurrentUser() continuamente (ex: tela de perfil)
+    // recebe o valor novo automaticamente, ja que os dois compartilham _currentUser.
+    override suspend fun refreshCurrentUser(): Result<User> = runCatching {
+        val fresh = api.getCurrentUserProfile().toDomain()
+        val existing = _currentUser.value
+        val merged = if (existing != null) fresh.copy(avatarLocalPath = existing.avatarLocalPath) else fresh
+        persistUser(merged)
+        merged
     }
 
+    override fun getProjectAssignableUsers(): Flow<List<User>> = flow {
+        emit(api.getUsers().map { it.toDomain() }.filter { it.role != UserRole.LIDER })
+    }.catch { emit(emptyList()) }
+
     override fun getUserById(id: String): Flow<User?> = flow {
-        delay(400)
-        emit(MockUsers.getById(id))
-    }
+        emit(runCatching { api.getUserById(id).toDomain() }.getOrNull())
+    }.catch { emit(null) }
 
     override fun getNotifications(userId: String): Flow<List<Notification>> = flow {
         emit(api.getNotifications().map { it.toDomain() })

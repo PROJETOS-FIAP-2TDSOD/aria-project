@@ -19,7 +19,7 @@ import retrofit2.HttpException
 class AuthRepositoryImpl @Inject constructor(
     private val api: AriaApiService,
     private val authSessionManager: AuthSessionManager,
-    private val userRepository: FakeUserRepository,
+    private val userRepository: UserRepositoryImpl,
     private val badgeUnlockTracker: BadgeUnlockTracker,
 ) : IAuthRepository {
 

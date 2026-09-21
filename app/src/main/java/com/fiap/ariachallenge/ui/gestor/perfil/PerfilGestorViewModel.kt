@@ -53,6 +53,7 @@ class PerfilGestorViewModel @Inject constructor(
 
     private fun load() {
         viewModelScope.launch {
+            userRepository.refreshCurrentUser()
             val user = userRepository.getCurrentUser().first()
             val projects = projectRepository.getAllProjects().first()
             _uiState.update {

@@ -17,6 +17,7 @@ import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectUpdateProgressDto
 import com.fiap.ariachallenge.data.remote.dto.RecoverPasswordRequestDto
 import com.fiap.ariachallenge.data.remote.dto.RegisterRequestDto
+import com.fiap.ariachallenge.data.remote.dto.UserDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -104,4 +105,13 @@ interface AriaApiService {
 
     @GET("api/v1/dashboard/roi-by-project")
     suspend fun getDashboardRoiByProject(): List<DashboardProjetoRoiDto>
+
+    @GET("api/v1/users/me")
+    suspend fun getCurrentUserProfile(): UserDto
+
+    @GET("api/v1/users")
+    suspend fun getUsers(): List<UserDto>
+
+    @GET("api/v1/users/{id}")
+    suspend fun getUserById(@Path("id") id: String): UserDto
 }
