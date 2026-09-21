@@ -62,6 +62,7 @@ class PerfilLiderViewModel @Inject constructor(
 
     private fun load() {
         viewModelScope.launch {
+            userRepository.refreshCurrentUser()
             val user = userRepository.getCurrentUser().first()
             val orientations = orientationRepository.getAllOrientations().first()
             val ideas = ideaRepository.getAllIdeas().first()

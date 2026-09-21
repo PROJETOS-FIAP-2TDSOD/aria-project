@@ -62,6 +62,7 @@ class PerfilOperadorViewModel @Inject constructor(
 
     private fun loadProfile() {
         viewModelScope.launch {
+            userRepository.refreshCurrentUser()
             val user = userRepository.getCurrentUser().first()
             val ideas = ideaRepository.getIdeasByAuthor(user.id).first()
             val projects = projectRepository.getAllProjects().first()
