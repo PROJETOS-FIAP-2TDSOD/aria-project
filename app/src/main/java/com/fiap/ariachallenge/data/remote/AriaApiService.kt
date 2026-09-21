@@ -6,6 +6,9 @@ import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
 import com.fiap.ariachallenge.data.remote.dto.IdeaReviewDto
 import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
 import com.fiap.ariachallenge.data.remote.dto.MessageResponseDto
+import com.fiap.ariachallenge.data.remote.dto.DashboardEstrategiaRoiDto
+import com.fiap.ariachallenge.data.remote.dto.DashboardProjetoRoiDto
+import com.fiap.ariachallenge.data.remote.dto.DashboardResumoDto
 import com.fiap.ariachallenge.data.remote.dto.NotificationDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
@@ -92,4 +95,13 @@ interface AriaApiService {
 
     @PATCH("api/v1/notifications/read-all")
     suspend fun markAllNotificationsAsRead()
+
+    @GET("api/v1/dashboard/summary")
+    suspend fun getDashboardSummary(): DashboardResumoDto
+
+    @GET("api/v1/dashboard/roi-by-strategy")
+    suspend fun getDashboardRoiByStrategy(): List<DashboardEstrategiaRoiDto>
+
+    @GET("api/v1/dashboard/roi-by-project")
+    suspend fun getDashboardRoiByProject(): List<DashboardProjetoRoiDto>
 }
