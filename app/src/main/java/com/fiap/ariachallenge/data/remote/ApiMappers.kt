@@ -8,6 +8,10 @@ import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationKeyMetricDto
 import com.fiap.ariachallenge.domain.model.OrientationKeyMetric
 import com.fiap.ariachallenge.data.remote.dto.MilestoneInputDto
+import com.fiap.ariachallenge.data.remote.dto.DashboardEstrategiaRoiDto
+import com.fiap.ariachallenge.data.remote.dto.DashboardProjetoRoiDto
+import com.fiap.ariachallenge.data.remote.dto.DashboardResumoDto
+import com.fiap.ariachallenge.data.remote.dto.IndicadorEstrategicoDto
 import com.fiap.ariachallenge.data.remote.dto.NotificationDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectMilestoneDto
@@ -15,18 +19,22 @@ import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectTeamMemberDto
 import com.fiap.ariachallenge.data.remote.dto.TeamMemberInputDto
 import com.fiap.ariachallenge.data.remote.dto.UserDto
+import com.fiap.ariachallenge.domain.model.DashboardSummary
 import com.fiap.ariachallenge.domain.model.Idea
 import com.fiap.ariachallenge.domain.model.MilestoneStatus
 import com.fiap.ariachallenge.domain.model.ProjectMilestone
 import com.fiap.ariachallenge.domain.model.ProjectTeamMember
 import com.fiap.ariachallenge.domain.model.IdeaCategory
 import com.fiap.ariachallenge.domain.model.IdeaStatus
+import com.fiap.ariachallenge.domain.model.IndicadorEstrategico
 import com.fiap.ariachallenge.domain.model.Notification
 import com.fiap.ariachallenge.domain.model.NotificationType
 import com.fiap.ariachallenge.domain.model.Orientation
 import com.fiap.ariachallenge.domain.model.OrientationPriority
 import com.fiap.ariachallenge.domain.model.Project
+import com.fiap.ariachallenge.domain.model.ProjectRoiSummary
 import com.fiap.ariachallenge.domain.model.ProjectStatus
+import com.fiap.ariachallenge.domain.model.StrategyRoiSummary
 import com.fiap.ariachallenge.domain.model.User
 import com.fiap.ariachallenge.domain.model.UserRole
 import java.time.LocalDate
@@ -278,4 +286,55 @@ fun NotificationDto.toDomain(): Notification = Notification(
     isRead = read,
     relatedIdeaId = relatedIdeaId,
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
+)
+
+fun IndicadorEstrategicoDto.toDomain(): IndicadorEstrategico = IndicadorEstrategico(
+    orientationId = orientationId,
+    orientationTitle = orientationTitle,
+    name = name,
+    achieved = achieved,
+    target = target,
+    progress = progress,
+)
+
+fun DashboardResumoDto.toDomain(): DashboardSummary = DashboardSummary(
+    ideasSubmetidas = ideasSubmetidas,
+    ideasAprovadas = ideasAprovadas,
+    ideasEmAnalise = ideasEmAnalise,
+    ideasEmProjeto = ideasEmProjeto,
+    taxaAprovacaoPercent = taxaAprovacaoPercent,
+    taxaConversaoPercent = taxaConversaoPercent,
+    projetosPlanejamento = projetosPlanejamento,
+    projetosEmAndamento = projetosEmAndamento,
+    projetosConcluidos = projetosConcluidos,
+    projetosSuspensos = projetosSuspensos,
+    projetosCancelados = projetosCancelados,
+    projetosNoPrazo = projetosNoPrazo,
+    projetosAtrasados = projetosAtrasados,
+    investimentoTotal = investimentoTotal,
+    roiTotal = roiTotal,
+    lucroTotal = lucroTotal,
+    roiDeltaPercent30d = roiDeltaPercent30d,
+    indicadoresEstrategicos = indicadoresEstrategicos.map { it.toDomain() },
+)
+
+fun DashboardProjetoRoiDto.toDomain(): ProjectRoiSummary = ProjectRoiSummary(
+    projectId = projectId,
+    titulo = titulo,
+    status = ProjectStatus.valueOf(status),
+    progresso = progresso,
+    investimento = investimento,
+    roi = roi,
+    lucro = lucro,
+    atrasado = atrasado,
+)
+
+fun DashboardEstrategiaRoiDto.toDomain(): StrategyRoiSummary = StrategyRoiSummary(
+    orientationId = orientationId,
+    titulo = titulo,
+    categoria = IdeaCategory.valueOf(categoria),
+    ideasCount = ideasCount,
+    projetosAtivos = projetosAtivos,
+    roiDeltaPercent = roiDeltaPercent,
+    progresso = progresso,
 )
