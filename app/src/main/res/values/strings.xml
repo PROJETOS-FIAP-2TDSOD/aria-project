@@ -740,6 +740,9 @@
     <string name="picker_title_period">Select period</string>
     <string name="picker_title_month">Select month</string>
     <string name="picker_title_visibility">Select visibility</string>
+    <string name="delete_idea_title">Delete idea</string>
+    <string name="delete_idea_message">Are you sure you want to delete "%1$s"? This cannot be undone.</string>
+    <string name="delete_idea_confirm">Delete</string>
     <string-array name="orientation_period_options">
         <item>Q3 2026 — Q2 2027</item>
         <item>Q4 2026 — Q3 2027</item>

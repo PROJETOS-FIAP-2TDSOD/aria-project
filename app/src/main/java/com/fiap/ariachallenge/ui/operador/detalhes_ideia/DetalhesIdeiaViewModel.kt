@@ -9,6 +9,7 @@ import com.fiap.ariachallenge.domain.model.AiTimelineEvent
 import com.fiap.ariachallenge.domain.model.Idea
 import com.fiap.ariachallenge.domain.repository.IAiRepository
 import com.fiap.ariachallenge.domain.repository.IIdeaRepository
+import com.fiap.ariachallenge.domain.repository.IUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.async
@@ -26,6 +27,9 @@ data class DetalhesIdeiaUiState(
     val aiInsights: List<AiTextInsight> = emptyList(),
     val scoreBreakdown: List<AiScoreBreakdownItem> = emptyList(),
     val timeline: List<AiTimelineEvent> = emptyList(),
+    val canDelete: Boolean = false,
+    val isDeleting: Boolean = false,
+    val deleteError: String? = null,
     val error: String? = null,
 )
 
@@ -33,6 +37,7 @@ data class DetalhesIdeiaUiState(
 class DetalhesIdeiaViewModel @Inject constructor(
     private val ideaRepository: IIdeaRepository,
     private val aiRepository: IAiRepository,
+    private val userRepository: IUserRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -55,18 +60,32 @@ class DetalhesIdeiaViewModel @Inject constructor(
                 val insightsDeferred = async { aiRepository.getIdeaAnalysis(ideaId) }
                 val breakdownDeferred = async { aiRepository.getScoreBreakdown(ideaId) }
                 val timelineDeferred = async { aiRepository.getIdeaTimeline(ideaId) }
+                val currentUserDeferred = async { userRepository.getCurrentUser().first() }
+                val idea = ideaDeferred.await()
+                val currentUser = currentUserDeferred.await()
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        idea = ideaDeferred.await(),
+                        idea = idea,
                         aiInsights = insightsDeferred.await(),
                         scoreBreakdown = breakdownDeferred.await(),
                         timeline = timelineDeferred.await(),
+                        canDelete = idea?.author?.id == currentUser.id,
                     )
                 }
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
+        }
+    }
+
+    fun deleteIdea(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDeleting = true, deleteError = null) }
+            ideaRepository.deleteIdea(ideaId).fold(
+                onSuccess = { onSuccess() },
+                onFailure = { e -> _uiState.update { it.copy(isDeleting = false, deleteError = e.message) } },
+            )
         }
     }
 }

@@ -739,6 +739,9 @@
     <string name="picker_title_period">Selecione o período</string>
     <string name="picker_title_month">Selecione o mês</string>
     <string name="picker_title_visibility">Selecione a visibilidade</string>
+    <string name="delete_idea_title">Excluir ideia</string>
+    <string name="delete_idea_message">Tem certeza que deseja excluir "%1$s"? Essa ação não pode ser desfeita.</string>
+    <string name="delete_idea_confirm">Excluir</string>
     <string-array name="orientation_period_options">
         <item>Q3 2026 — Q2 2027</item>
         <item>Q4 2026 — Q3 2027</item>

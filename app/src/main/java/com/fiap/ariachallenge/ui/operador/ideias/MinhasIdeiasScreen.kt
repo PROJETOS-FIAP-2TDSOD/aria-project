@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,6 +26,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.fiap.ariachallenge.R
 import com.fiap.ariachallenge.domain.model.Idea
 import com.fiap.ariachallenge.domain.model.IdeaStatus
@@ -56,65 +60,76 @@ fun MinhasIdeiasScreen(
     viewModel: MinhasIdeiasViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    OperadorBadgeCelebrationHost {
-    Scaffold(
-        containerColor = AriaTheme.colors.bgPrimary,
-        topBar = {
-            AriaTopBar(
-                title = stringResource(R.string.ideas_screen_title),
-                sub = stringResource(R.string.ideas_submitted_count, uiState.ideas.size),
-            )
-        },
-        bottomBar = {
-            AriaBottomNav(
-                items = operadorBottomNavItems(),
-                activeId = currentRoute,
-                onSelect = onNavigate,
-            )
-        },
-        floatingActionButton = { AriaFab(onClick = onNavigateToNovaIdeia) },
-    ) { padding ->
-        val filterTabs = listOf(
-            stringResource(R.string.action_filter_all),
-            stringResource(R.string.idea_status_in_analysis),
-            stringResource(R.string.idea_status_approved),
-            stringResource(R.string.idea_status_in_project),
-            stringResource(R.string.idea_status_rejected),
-        )
-        val filterStatuses: List<IdeaStatus?> = listOf(
-            null,
-            IdeaStatus.EM_ANALISE,
-            IdeaStatus.APROVADA,
-            IdeaStatus.EM_PROJETO,
-            IdeaStatus.REJEITADA,
-        )
-        val selectedFilterTab = filterStatuses.indexOf(uiState.selectedFilter).coerceAtLeast(0)
-
-        Column(modifier = Modifier.padding(padding).fillMaxSize()) {
-            AriaTabs(
-                items = filterTabs,
-                selected = selectedFilterTab,
-                scrollable = true,
-                onSelect = { index -> viewModel.setFilter(filterStatuses[index]) },
-            )
-            when {
-                uiState.isLoading -> AriaLoadingSkeleton()
-                uiState.error != null -> AriaErrorState(onRetry = viewModel::refresh)
-                uiState.filteredIdeas.isEmpty() -> AriaEmptyState(
-                    icon = Icons.Outlined.Lightbulb,
-                    title = stringResource(R.string.my_ideas_empty_filter_title),
-                    sub = stringResource(R.string.my_ideas_empty_filter_sub),
-                    cta = stringResource(R.string.ideas_new_button),
-                    onCta = onNavigateToNovaIdeia,
-                )
-                else -> IdeasList(
-                    ideas = uiState.filteredIdeas,
-                    onIdeaClick = onNavigateToDetalhes,
-                )
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
             }
         }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
+
+    OperadorBadgeCelebrationHost {
+        Scaffold(
+            containerColor = AriaTheme.colors.bgPrimary,
+            topBar = {
+                AriaTopBar(
+                    title = stringResource(R.string.ideas_screen_title),
+                    sub = stringResource(R.string.ideas_submitted_count, uiState.ideas.size),
+                )
+            },
+            bottomBar = {
+                AriaBottomNav(
+                    items = operadorBottomNavItems(),
+                    activeId = currentRoute,
+                    onSelect = onNavigate,
+                )
+            },
+            floatingActionButton = { AriaFab(onClick = onNavigateToNovaIdeia) },
+        ) { padding ->
+            val filterTabs = listOf(
+                stringResource(R.string.action_filter_all),
+                stringResource(R.string.idea_status_in_analysis),
+                stringResource(R.string.idea_status_approved),
+                stringResource(R.string.idea_status_in_project),
+                stringResource(R.string.idea_status_rejected),
+            )
+            val filterStatuses: List<IdeaStatus?> = listOf(
+                null,
+                IdeaStatus.EM_ANALISE,
+                IdeaStatus.APROVADA,
+                IdeaStatus.EM_PROJETO,
+                IdeaStatus.REJEITADA,
+            )
+            val selectedFilterTab = filterStatuses.indexOf(uiState.selectedFilter).coerceAtLeast(0)
+
+            Column(modifier = Modifier.padding(padding).fillMaxSize()) {
+                AriaTabs(
+                    items = filterTabs,
+                    selected = selectedFilterTab,
+                    scrollable = true,
+                    onSelect = { index -> viewModel.setFilter(filterStatuses[index]) },
+                )
+                when {
+                    uiState.isLoading -> AriaLoadingSkeleton()
+                    uiState.error != null -> AriaErrorState(onRetry = viewModel::refresh)
+                    uiState.filteredIdeas.isEmpty() -> AriaEmptyState(
+                        icon = Icons.Outlined.Lightbulb,
+                        title = stringResource(R.string.my_ideas_empty_filter_title),
+                        sub = stringResource(R.string.my_ideas_empty_filter_sub),
+                        cta = stringResource(R.string.ideas_new_button),
+                        onCta = onNavigateToNovaIdeia,
+                    )
+                    else -> IdeasList(
+                        ideas = uiState.filteredIdeas,
+                        onIdeaClick = onNavigateToDetalhes,
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -174,4 +189,3 @@ private fun IdeaStatus.toAriaStatus(): AriaStatus = when (this) {
     IdeaStatus.REJEITADA -> AriaStatus.Rejected
     IdeaStatus.EM_PROJETO -> AriaStatus.Project
 }
-
