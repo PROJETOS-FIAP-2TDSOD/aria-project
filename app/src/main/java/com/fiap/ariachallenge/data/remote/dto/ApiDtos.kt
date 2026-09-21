@@ -80,6 +80,39 @@ data class ProjectDto(
     val updatedAt: String,
 )
 
+// Payload de POST/PUT /projects — espelha ProjectRequestDto.java (originIdeaId em vez de objeto aninhado)
+data class ProjectRequestDto(
+    val title: String,
+    val description: String,
+    val originIdeaId: String,
+    val sponsorLabel: String,
+    val strategicOrientationLabel: String,
+    val budget: Double = 0.0,
+    val estimatedRoi: Double = 0.0,
+    val teamMembers: List<TeamMemberInputDto> = emptyList(),
+    val milestones: List<MilestoneInputDto> = emptyList(),
+    val startDate: String,
+    val expectedEndDate: String,
+)
+
+data class TeamMemberInputDto(
+    val userId: String,
+    val projectRole: String,
+)
+
+data class MilestoneInputDto(
+    val title: String,
+    val dueDate: String,
+    val status: String? = null,
+)
+
+// Payload de PATCH /projects/{id}/progress — espelha ProjectUpdateProgressDto.java
+data class ProjectUpdateProgressDto(
+    val status: String? = null,
+    val progress: Int? = null,
+    val actualRoi: Double? = null,
+)
+
 data class OrientationKeyMetricDto(
     val name: String,
     val achieved: String,
