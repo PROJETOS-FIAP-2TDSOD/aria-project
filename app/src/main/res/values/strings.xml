@@ -743,6 +743,9 @@
     <string name="delete_idea_title">Delete idea</string>
     <string name="delete_idea_message">Are you sure you want to delete "%1$s"? This cannot be undone.</string>
     <string name="delete_idea_confirm">Delete</string>
+    <string name="dashboard_strategy_roi_title">ROI by Strategy</string>
+    <string name="dashboard_strategy_roi_sub">Return by strategic orientation</string>
+    <string name="dashboard_strategy_roi_footer">%1$d ideas · %2$d active projects</string>
     <string-array name="orientation_period_options">
         <item>Q3 2026 — Q2 2027</item>
         <item>Q4 2026 — Q3 2027</item>

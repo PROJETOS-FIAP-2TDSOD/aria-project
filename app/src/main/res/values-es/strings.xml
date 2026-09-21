@@ -742,6 +742,9 @@
     <string name="delete_idea_title">Eliminar idea</string>
     <string name="delete_idea_message">¿Seguro que quieres eliminar "%1$s"? Esta acción no se puede deshacer.</string>
     <string name="delete_idea_confirm">Eliminar</string>
+    <string name="dashboard_strategy_roi_title">ROI por Estrategia</string>
+    <string name="dashboard_strategy_roi_sub">Retorno por orientación estratégica</string>
+    <string name="dashboard_strategy_roi_footer">%1$d ideas · %2$d proyectos activos</string>
     <string-array name="orientation_period_options">
         <item>Q3 2026 — Q2 2027</item>
         <item>Q4 2026 — Q3 2027</item>
