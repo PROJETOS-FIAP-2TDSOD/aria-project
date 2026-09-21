@@ -167,7 +167,7 @@ data class NotificationDto(
     val title: String,
     val message: String,
     val type: String,
-    val isRead: Boolean = false,
+    val read: Boolean = false,
     val relatedIdeaId: String? = null,
     val createdAt: String,
 )

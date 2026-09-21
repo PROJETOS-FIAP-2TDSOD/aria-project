@@ -270,13 +270,12 @@ fun OrientationDto.toDomain(): Orientation = Orientation(
     expiresAt = expiresAt?.let { LocalDateTime.parse(it, dateTimeFormatter) },
 )
 
-
 fun NotificationDto.toDomain(): Notification = Notification(
     id = id,
     title = title,
     message = message,
     type = NotificationType.valueOf(type),
-    isRead = isRead,
+    isRead = read,
     relatedIdeaId = relatedIdeaId,
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
 )
