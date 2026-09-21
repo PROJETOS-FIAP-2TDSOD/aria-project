@@ -140,3 +140,24 @@ data class OrientationDto(
     val createdAt: String,
     val expiresAt: String? = null,
 )
+
+// Payload de POST/PUT /orientations — espelha OrientationRequestDto.java (sem os
+// campos calculados: author, ideasCount, roiCompact, progress, etc.)
+data class OrientationRequestDto(
+    val code: String = "",
+    val title: String,
+    val description: String,
+    val category: String,
+    val priority: String,
+    val period: String = "",
+    val targetRoles: List<String>,
+    val keyMetrics: List<KeyMetricInputDto> = emptyList(),
+    val expiresAt: String? = null, // yyyy-MM-dd
+)
+
+data class KeyMetricInputDto(
+    val name: String,
+    val achieved: String,
+    val target: String,
+    val progress: Float = 0f,
+)
