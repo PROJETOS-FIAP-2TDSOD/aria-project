@@ -13,6 +13,7 @@ import com.fiap.ariachallenge.domain.model.ProjectStatus
 import com.fiap.ariachallenge.domain.model.User
 import com.fiap.ariachallenge.domain.analytics.AnalyticsMetricsCalculator
 import com.fiap.ariachallenge.domain.repository.IAiRepository
+import com.fiap.ariachallenge.domain.repository.IDashboardRepository
 import com.fiap.ariachallenge.domain.repository.IIdeaRepository
 import com.fiap.ariachallenge.domain.repository.IProjectRepository
 import com.fiap.ariachallenge.domain.repository.IUserRepository
@@ -88,6 +89,7 @@ class DashboardLiderViewModel @Inject constructor(
     private val ideaRepository: IIdeaRepository,
     private val projectRepository: IProjectRepository,
     private val aiRepository: IAiRepository,
+    private val dashboardRepository: IDashboardRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardLiderUiState())
@@ -138,30 +140,51 @@ class DashboardLiderViewModel @Inject constructor(
                 val month = _uiState.value.selectedMonth.coerceIn(1, currentMonth)
                 val monthInsight = aiRepository.getDashboardMonthInsight(month)
 
-                val submitted = ideas.size
-                val approved = ideas.count { it.status == IdeaStatus.APROVADA || it.status == IdeaStatus.EM_PROJETO }
-                val inProject = ideas.count { it.status == IdeaStatus.EM_PROJETO }
-                val completed = projects.count { it.status == ProjectStatus.CONCLUIDO }
-                val activeProjects = projects.count { it.status == ProjectStatus.EM_ANDAMENTO }
-                val approvalRate = if (submitted == 0) 0 else (approved * 100) / submitted
-                val conversion = if (submitted == 0) 0 else (inProject * 100) / submitted
-                val totalRoi = projects.sumOf { (it.actualRoi ?: it.estimatedRoi) }
+                // Numeros de resumo vem do endpoint real (GET /dashboard/summary) e do
+                // roi-by-project, com fallback pro calculo local se a API falhar.
+                // ideas/projects continuam buscados so para a distribuicao por
+                // categoria e a serie mensal de ROI, que nao tem endpoint dedicado.
+                val summary = dashboardRepository.getSummary().getOrNull()
+                val roiByProject = dashboardRepository.getRoiByProject().getOrDefault(emptyList())
+
+                val submitted = summary?.ideasSubmetidas
+                    ?: ideas.size
+                val approved = summary?.ideasAprovadas
+                    ?: ideas.count { it.status == IdeaStatus.APROVADA || it.status == IdeaStatus.EM_PROJETO }
+                val inProject = summary?.ideasEmProjeto
+                    ?: ideas.count { it.status == IdeaStatus.EM_PROJETO }
+                val completed = summary?.projetosConcluidos
+                    ?: projects.count { it.status == ProjectStatus.CONCLUIDO }
+                val activeProjects = summary?.projetosEmAndamento
+                    ?: projects.count { it.status == ProjectStatus.EM_ANDAMENTO }
+                val approvalRate = summary?.taxaAprovacaoPercent
+                    ?: if (submitted == 0) 0 else (approved * 100) / submitted
+                val conversion = summary?.taxaConversaoPercent
+                    ?: if (submitted == 0) 0 else (inProject * 100) / submitted
+                val totalRoi = summary?.roiTotal
+                    ?: projects.sumOf { (it.actualRoi ?: it.estimatedRoi) }
 
                 val categoryGroups = ideas.groupBy { it.category }
                 val categoryDistribution = categoryGroups.map { (cat, list) ->
                     CategoryShare(cat, if (submitted == 0) 0 else (list.size * 100) / submitted)
                 }.sortedByDescending { it.percent }
 
-                val topProjects = projects
-                    .sortedByDescending { (it.actualRoi ?: it.estimatedRoi) }
-                    .take(5)
-                    .map { p ->
-                        TopProjectUi(
-                            id = p.id,
-                            title = p.title,
-                            valueReais = p.actualRoi ?: p.estimatedRoi,
-                        )
+                val topProjects = if (roiByProject.isNotEmpty()) {
+                    roiByProject.sortedByDescending { it.roi }.take(5).map { p ->
+                        TopProjectUi(id = p.projectId, title = p.titulo, valueReais = p.roi)
                     }
+                } else {
+                    projects
+                        .sortedByDescending { (it.actualRoi ?: it.estimatedRoi) }
+                        .take(5)
+                        .map { p ->
+                            TopProjectUi(
+                                id = p.id,
+                                title = p.title,
+                                valueReais = p.actualRoi ?: p.estimatedRoi,
+                            )
+                        }
+                }
 
                 cachedIdeas = ideas
                 cachedProjects = projects
@@ -175,50 +198,50 @@ class DashboardLiderViewModel @Inject constructor(
                 _uiState.update {
                     applyMonthSelection(
                         it.copy(
-                        isLoading = false,
-                        user = user,
-                        availableMonthCount = currentMonth,
-                        ideasSubmitted = submitted,
-                        ideasSubmittedDelta = monthDeltas.ideasSubmittedDelta,
-                        approvalRatePercent = approvalRate,
-                        approvalRateDelta = monthDeltas.approvalRateDelta,
-                        activeProjects = activeProjects,
-                        activeProjectsDelta = monthDeltas.activeProjectsDelta,
-                        conversionPercent = conversion,
-                        conversionDelta = monthDeltas.conversionDelta,
-                        roiAmount = totalRoi,
-                        roiSparkline = monthlyRoi,
-                        monthlyRoiPoints = monthlyRoi,
-                        monthlyMonthRes = monthLabels,
-                        roiAccumulated = totalRoi,
-                        categoryDistribution = categoryDistribution,
-                        topProjects = topWithScale,
-                        funnel = listOf(
-                            FunnelStepUi(R.string.dashboard_funnel_submitted, submitted, 100),
-                            FunnelStepUi(
-                                R.string.dashboard_funnel_approved,
-                                approved,
-                                pct(approved, submitted),
-                                convertPct(approved, submitted),
+                            isLoading = false,
+                            user = user,
+                            availableMonthCount = currentMonth,
+                            ideasSubmitted = submitted,
+                            ideasSubmittedDelta = monthDeltas.ideasSubmittedDelta,
+                            approvalRatePercent = approvalRate,
+                            approvalRateDelta = monthDeltas.approvalRateDelta,
+                            activeProjects = activeProjects,
+                            activeProjectsDelta = monthDeltas.activeProjectsDelta,
+                            conversionPercent = conversion,
+                            conversionDelta = monthDeltas.conversionDelta,
+                            roiAmount = totalRoi,
+                            roiSparkline = monthlyRoi,
+                            monthlyRoiPoints = monthlyRoi,
+                            monthlyMonthRes = monthLabels,
+                            roiAccumulated = totalRoi,
+                            categoryDistribution = categoryDistribution,
+                            topProjects = topWithScale,
+                            funnel = listOf(
+                                FunnelStepUi(R.string.dashboard_funnel_submitted, submitted, 100),
+                                FunnelStepUi(
+                                    R.string.dashboard_funnel_approved,
+                                    approved,
+                                    pct(approved, submitted),
+                                    convertPct(approved, submitted),
+                                ),
+                                FunnelStepUi(
+                                    R.string.dashboard_funnel_in_project,
+                                    inProject,
+                                    pct(inProject, submitted),
+                                    convertPct(inProject, approved),
+                                ),
+                                FunnelStepUi(
+                                    R.string.dashboard_funnel_completed,
+                                    completed,
+                                    pct(completed, submitted),
+                                    convertPct(completed, inProject),
+                                ),
                             ),
-                            FunnelStepUi(
-                                R.string.dashboard_funnel_in_project,
-                                inProject,
-                                pct(inProject, submitted),
-                                convertPct(inProject, approved),
-                            ),
-                            FunnelStepUi(
-                                R.string.dashboard_funnel_completed,
-                                completed,
-                                pct(completed, submitted),
-                                convertPct(completed, inProject),
+                            aiInsights = listOf(
+                                AiInsightUi(R.string.dashboard_ai_forecast_eyebrow, monthInsight.forecastBody, AiInsightTone.Accent),
+                                AiInsightUi(R.string.dashboard_ai_emerging_eyebrow, monthInsight.emergingBody, AiInsightTone.Success),
                             ),
                         ),
-                        aiInsights = listOf(
-                            AiInsightUi(R.string.dashboard_ai_forecast_eyebrow, monthInsight.forecastBody, AiInsightTone.Accent),
-                            AiInsightUi(R.string.dashboard_ai_emerging_eyebrow, monthInsight.emergingBody, AiInsightTone.Success),
-                        ),
-                    ),
                         month,
                     )
                 }
