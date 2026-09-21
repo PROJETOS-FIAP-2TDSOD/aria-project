@@ -10,6 +10,7 @@ import com.fiap.ariachallenge.domain.repository.IIdeaRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 @Singleton
@@ -19,19 +20,19 @@ class IdeaRepositoryImpl @Inject constructor(
 
     override fun getAllIdeas(): Flow<List<Idea>> = flow {
         emit(api.getIdeas().map { it.toDomain() })
-    }
+    }.catch { emit(emptyList()) }
 
     override fun getIdeaById(id: String): Flow<Idea?> = flow {
         emit(runCatching { api.getIdeaById(id).toDomain() }.getOrNull())
-    }
+    }.catch { emit(null) }
 
     override fun getIdeasByAuthor(authorId: String): Flow<List<Idea>> = flow {
         emit(api.getIdeas().map { it.toDomain() }.filter { it.author.id == authorId })
-    }
+    }.catch { emit(emptyList()) }
 
     override fun getIdeasByStatus(status: IdeaStatus): Flow<List<Idea>> = flow {
         emit(api.getIdeas().map { it.toDomain() }.filter { it.status == status })
-    }
+    }.catch { emit(emptyList()) }
 
     override fun getPendingIdeas(): Flow<List<Idea>> = flow {
         emit(
@@ -39,7 +40,7 @@ class IdeaRepositoryImpl @Inject constructor(
                 .filter { it.status == IdeaStatus.AGUARDANDO_ANALISE || it.status == IdeaStatus.EM_ANALISE }
                 .sortedByDescending { it.createdAt },
         )
-    }
+    }.catch { emit(emptyList()) }
 
     override suspend fun submitIdea(idea: Idea): Result<Idea> = runCatching {
         api.createIdea(idea.toRequestDto()).toDomain()
