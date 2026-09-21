@@ -1,6 +1,7 @@
 package com.fiap.ariachallenge.ui.operador.detalhes_ideia
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,46 +15,46 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.fiap.ariachallenge.R
 import com.fiap.ariachallenge.domain.model.AiInsightKind
 import com.fiap.ariachallenge.domain.model.AiScoreBreakdownItem
 import com.fiap.ariachallenge.domain.model.AiTextInsight
 import com.fiap.ariachallenge.domain.model.AiTimelineEvent
 import com.fiap.ariachallenge.domain.model.Idea
 import com.fiap.ariachallenge.domain.model.IdeaStatus
-import androidx.compose.ui.res.stringResource
-import com.fiap.ariachallenge.R
 import com.fiap.ariachallenge.ui.aria.AriaCard
 import com.fiap.ariachallenge.ui.aria.AriaDivider
-import com.fiap.ariachallenge.ui.aria.AriaHairline
 import com.fiap.ariachallenge.ui.aria.AriaProgressLine
-import com.fiap.ariachallenge.ui.aria.AriaTabs
 import com.fiap.ariachallenge.ui.aria.AriaScoreBadge
 import com.fiap.ariachallenge.ui.aria.AriaScoreRing
 import com.fiap.ariachallenge.ui.aria.AriaScoreRingDefaults
@@ -61,6 +62,7 @@ import com.fiap.ariachallenge.ui.aria.AriaSectionEmptyCard
 import com.fiap.ariachallenge.ui.aria.AriaSectionTitle
 import com.fiap.ariachallenge.ui.aria.AriaStatus
 import com.fiap.ariachallenge.ui.aria.AriaStatusBadge
+import com.fiap.ariachallenge.ui.aria.AriaTabs
 import com.fiap.ariachallenge.ui.aria.AriaTopBar
 import com.fiap.ariachallenge.ui.theme.AriaText
 import com.fiap.ariachallenge.ui.theme.AriaTheme
@@ -75,6 +77,51 @@ fun DetalhesIdeiaScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val c = AriaTheme.colors
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteDialog && uiState.idea != null) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = {
+                Text(
+                    text = stringResource(R.string.delete_idea_title),
+                    style = AriaText.titleMd,
+                    color = c.textPrimary,
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(R.string.delete_idea_message, uiState.idea!!.title),
+                    style = AriaText.bodyMd,
+                    color = c.textSecondary,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = !uiState.isDeleting,
+                    onClick = {
+                        showDeleteDialog = false
+                        viewModel.deleteIdea(onSuccess = onBack)
+                    },
+                ) {
+                    Text(
+                        text = stringResource(R.string.delete_idea_confirm),
+                        color = c.error,
+                        style = AriaText.labelMd,
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(
+                        text = stringResource(R.string.action_cancel),
+                        color = c.textSecondary,
+                        style = AriaText.labelMd,
+                    )
+                }
+            },
+        )
+    }
 
     Scaffold(
         containerColor = c.bgPrimary,
@@ -85,6 +132,18 @@ fun DetalhesIdeiaScreen(
                     uiState.idea?.id?.takeLast(4)?.padStart(4, '0') ?: uiState.displayCode,
                 ),
                 onBack = onBack,
+                trailing = {
+                    if (uiState.canDelete) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = stringResource(R.string.cd_delete_button),
+                            tint = c.error,
+                            modifier = Modifier
+                                .size(22.dp)
+                                .clickable { showDeleteDialog = true },
+                        )
+                    }
+                },
             )
         },
     ) { padding ->
