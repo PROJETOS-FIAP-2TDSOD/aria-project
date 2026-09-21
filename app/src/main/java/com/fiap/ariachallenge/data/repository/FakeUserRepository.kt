@@ -3,11 +3,13 @@ package com.fiap.ariachallenge.data.repository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import com.fiap.ariachallenge.data.local.AvatarStorage
+import com.fiap.ariachallenge.data.remote.AriaApiService
+import com.fiap.ariachallenge.data.remote.toDomain
 import com.fiap.ariachallenge.data.session.AuthSessionManager
-import com.fiap.ariachallenge.data.mock.MockNotifications
 import com.fiap.ariachallenge.data.mock.MockUsers
 import com.fiap.ariachallenge.data.remote.InMemoryApiStore
 import com.fiap.ariachallenge.domain.gamification.GamificationCalculator
@@ -24,10 +26,10 @@ class FakeUserRepository @Inject constructor(
     private val authSessionManager: AuthSessionManager,
     private val avatarStorage: AvatarStorage,
     private val store: InMemoryApiStore,
+    private val api: AriaApiService,
 ) : IUserRepository {
 
     private val _currentUser = MutableStateFlow<User?>(null)
-    private val _notifications = MutableStateFlow(MockNotifications.allNotifications.toMutableList())
 
     suspend fun setCurrentUser(user: User) {
         _currentUser.value = user
@@ -55,20 +57,17 @@ class FakeUserRepository @Inject constructor(
         emit(MockUsers.getById(id))
     }
 
-    override fun getNotifications(userId: String): Flow<List<Notification>> = _notifications
+    override fun getNotifications(userId: String): Flow<List<Notification>> = flow {
+        emit(api.getNotifications().map { it.toDomain() })
+    }.catch { emit(emptyList()) }
 
-    override suspend fun markNotificationRead(notificationId: String): Result<Unit> {
-        delay(300)
-        _notifications.value = _notifications.value.map {
-            if (it.id == notificationId) it.copy(isRead = true) else it
-        }.toMutableList()
-        return Result.success(Unit)
+    override suspend fun markNotificationRead(notificationId: String): Result<Unit> = runCatching {
+        api.markNotificationAsRead(notificationId)
+        Unit
     }
 
-    override suspend fun markAllNotificationsRead(userId: String): Result<Unit> {
-        delay(500)
-        _notifications.value = _notifications.value.map { it.copy(isRead = true) }.toMutableList()
-        return Result.success(Unit)
+    override suspend fun markAllNotificationsRead(userId: String): Result<Unit> = runCatching {
+        api.markAllNotificationsAsRead()
     }
 
     override fun calculateUserPoints(userId: String): Int {
