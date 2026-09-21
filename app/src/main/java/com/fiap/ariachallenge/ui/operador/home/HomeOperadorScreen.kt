@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,6 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.fiap.ariachallenge.R
 import com.fiap.ariachallenge.domain.model.IdeaStatus
 import com.fiap.ariachallenge.navigation.AriaDestination
@@ -69,96 +73,107 @@ fun HomeOperadorScreen(
     viewModel: HomeOperadorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
     val c = AriaTheme.colors
     val firstName = uiState.currentUser?.name?.split(" ")?.firstOrNull().orEmpty()
 
     OperadorBadgeCelebrationHost {
-    Scaffold(
-        containerColor = c.bgPrimary,
-        topBar = {
-            HomeHeader(
-                firstName = firstName,
-                userName = uiState.currentUser?.name.orEmpty(),
-                avatarLocalPath = uiState.currentUser?.avatarLocalPath,
-                onNotifClick = { onNavigate(AriaDestination.OperadorNotificacoes.route) },
-                onAvatarClick = { onNavigate(AriaDestination.OperadorPerfil.route) },
-            )
-        },
-        bottomBar = {
-            AriaBottomNav(
-                items = operadorBottomNavItems(),
-                activeId = currentRoute,
-                onSelect = onNavigate,
-            )
-        },
-        floatingActionButton = { AriaFab(onClick = onNavigateToNovaIdeia) },
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier.padding(padding).fillMaxSize(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            item {
-                PerformanceWidget(
-                    userPoints = uiState.userPoints,
-                    userBadges = uiState.userBadges,
+        Scaffold(
+            containerColor = c.bgPrimary,
+            topBar = {
+                HomeHeader(
+                    firstName = firstName,
+                    userName = uiState.currentUser?.name.orEmpty(),
+                    avatarLocalPath = uiState.currentUser?.avatarLocalPath,
+                    onNotifClick = { onNavigate(AriaDestination.OperadorNotificacoes.route) },
+                    onAvatarClick = { onNavigate(AriaDestination.OperadorPerfil.route) },
                 )
-            }
-            item { MetricGrid(uiState) }
-            item { Spacer(modifier = Modifier.height(12.dp)) }
-            if (uiState.orientations.isNotEmpty()) {
-                item { AriaSectionTitle(text = stringResource(R.string.orientations_section_title)) }
-                items(uiState.orientations) { orientation ->
-                    AriaCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        padding = 14.dp,
-                        onClick = { onNavigateToOrientacaoDetalhes(orientation.id) },
-                    ) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(text = orientation.title, style = AriaText.titleMd, color = c.textPrimary)
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = orientation.description, style = AriaText.bodyMd, color = c.textTertiary, maxLines = 3)
+            },
+            bottomBar = {
+                AriaBottomNav(
+                    items = operadorBottomNavItems(),
+                    activeId = currentRoute,
+                    onSelect = onNavigate,
+                )
+            },
+            floatingActionButton = { AriaFab(onClick = onNavigateToNovaIdeia) },
+        ) { padding ->
+            LazyColumn(
+                modifier = Modifier.padding(padding).fillMaxSize(),
+                contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 100.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                item {
+                    PerformanceWidget(
+                        userPoints = uiState.userPoints,
+                        userBadges = uiState.userBadges,
+                    )
+                }
+                item { MetricGrid(uiState) }
+                item { Spacer(modifier = Modifier.height(12.dp)) }
+                if (uiState.orientations.isNotEmpty()) {
+                    item { AriaSectionTitle(text = stringResource(R.string.orientations_section_title)) }
+                    items(uiState.orientations) { orientation ->
+                        AriaCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            padding = 14.dp,
+                            onClick = { onNavigateToOrientacaoDetalhes(orientation.id) },
+                        ) {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(text = orientation.title, style = AriaText.titleMd, color = c.textPrimary)
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(text = orientation.description, style = AriaText.bodyMd, color = c.textTertiary, maxLines = 3)
+                            }
                         }
+                    }
+                    item { Spacer(modifier = Modifier.height(12.dp)) }
+                }
+                item {
+                    AriaSectionTitle(text = stringResource(R.string.operador_home_updates_title))
+                }
+                item {
+                    if (uiState.recentUpdates.isNotEmpty()) {
+                        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            uiState.recentUpdates.forEach { update ->
+                                OperadorUpdateCard(
+                                    update = update,
+                                    onClick = { onNavigateToIdeiaDetalhes(update.ideaId) },
+                                )
+                            }
+                        }
+                    } else {
+                        AriaSectionEmptyCard(message = stringResource(R.string.state_section_empty_updates))
                     }
                 }
                 item { Spacer(modifier = Modifier.height(12.dp)) }
-            }
-            item {
-                AriaSectionTitle(text = stringResource(R.string.operador_home_updates_title))
-            }
-            item {
-                if (uiState.recentUpdates.isNotEmpty()) {
-                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        uiState.recentUpdates.forEach { update ->
-                            OperadorUpdateCard(
-                                update = update,
-                                onClick = { onNavigateToIdeiaDetalhes(update.ideaId) },
-                            )
-                        }
-                    }
-                } else {
-                    AriaSectionEmptyCard(message = stringResource(R.string.state_section_empty_updates))
+                item {
+                    AriaSectionTitle(
+                        text = stringResource(R.string.operador_home_ai_suggestions),
+                        sub = stringResource(R.string.operador_home_ai_suggestions_sub),
+                    )
                 }
-            }
-            item { Spacer(modifier = Modifier.height(12.dp)) }
-            item {
-                AriaSectionTitle(
-                    text = stringResource(R.string.operador_home_ai_suggestions),
-                    sub = stringResource(R.string.operador_home_ai_suggestions_sub),
-                )
-            }
-            item {
-                val suggestion = uiState.aiSuggestion
-                if (suggestion != null) {
-                    AiSuggestionCard(suggestion = suggestion, onClick = {
-                        onNavigateToIdeiaDetalhes(suggestion.sourceIdeaId)
-                    })
-                } else {
-                    AriaSectionEmptyCard(message = stringResource(R.string.state_section_empty_ai_operador))
+                item {
+                    val suggestion = uiState.aiSuggestion
+                    if (suggestion != null) {
+                        AiSuggestionCard(suggestion = suggestion, onClick = {
+                            onNavigateToIdeiaDetalhes(suggestion.sourceIdeaId)
+                        })
+                    } else {
+                        AriaSectionEmptyCard(message = stringResource(R.string.state_section_empty_ai_operador))
+                    }
                 }
             }
         }
-    }
     }
 }
 
@@ -344,4 +359,3 @@ private fun AiSuggestionCard(
         }
     }
 }
-

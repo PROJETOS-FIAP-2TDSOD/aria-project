@@ -33,6 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +47,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,6 +79,17 @@ fun AnaliseScreen(
     viewModel: AnaliseViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
     val c = AriaTheme.colors
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -382,70 +397,70 @@ private fun TrendsTab(state: AnaliseUiState, onOpenFullTrends: () -> Unit) {
                     color = c.textTertiary,
                 )
             } else {
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                state.trends.forEach { t ->
-                    Column {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = stringResource(t.labelRes), style = AriaText.bodyMd, color = c.textPrimary)
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Icon(
-                                    imageVector = if (t.up) Icons.AutoMirrored.Filled.TrendingUp else Icons.AutoMirrored.Filled.TrendingDown,
-                                    contentDescription = null,
-                                    tint = if (t.up) c.success else c.error,
-                                    modifier = Modifier.size(16.dp),
-                                )
-                                Text(
-                                    text = t.changeLabel,
-                                    color = if (t.up) c.success else c.error,
-                                    style = AriaText.labelMd,
-                                )
+                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    state.trends.forEach { t ->
+                        Column {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text(text = stringResource(t.labelRes), style = AriaText.bodyMd, color = c.textPrimary)
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Icon(
+                                        imageVector = if (t.up) Icons.AutoMirrored.Filled.TrendingUp else Icons.AutoMirrored.Filled.TrendingDown,
+                                        contentDescription = null,
+                                        tint = if (t.up) c.success else c.error,
+                                        modifier = Modifier.size(16.dp),
+                                    )
+                                    Text(
+                                        text = t.changeLabel,
+                                        color = if (t.up) c.success else c.error,
+                                        style = AriaText.labelMd,
+                                    )
+                                }
                             }
+                            Spacer(modifier = Modifier.height(6.dp))
+                            AriaProgressLine(
+                                value = (t.percent * 2.4f / 100f).coerceIn(0f, 1f),
+                                color = if (t.up) c.primaryMain else c.textTertiary,
+                            )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
-                        AriaProgressLine(
-                            value = (t.percent * 2.4f / 100f).coerceIn(0f, 1f),
-                            color = if (t.up) c.primaryMain else c.textTertiary,
-                        )
                     }
                 }
-            }
             }
         }
     }
 
     if (state.emerging.isNotEmpty()) {
-    AriaSectionTitle(text = stringResource(R.string.analyses_emerging_trends), sub = stringResource(R.string.analyses_emerging_trends_sub))
-    AriaCard(padding = 16.dp) {
-        Column {
-            state.emerging.forEachIndexed { i, e ->
-                if (i > 0) {
-                    Spacer(modifier = Modifier.height(14.dp))
-                    AriaHairline()
-                    Spacer(modifier = Modifier.height(14.dp))
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    val (bg, fg, ic) = when (e.tone) {
-                        EmergingTone.Accent -> Triple(c.accentSubtle, c.accentMain, "🔥")
-                        EmergingTone.Info -> Triple(c.infoBg, c.info, "✦")
+        AriaSectionTitle(text = stringResource(R.string.analyses_emerging_trends), sub = stringResource(R.string.analyses_emerging_trends_sub))
+        AriaCard(padding = 16.dp) {
+            Column {
+                state.emerging.forEachIndexed { i, e ->
+                    if (i > 0) {
+                        Spacer(modifier = Modifier.height(14.dp))
+                        AriaHairline()
+                        Spacer(modifier = Modifier.height(14.dp))
                     }
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(bg),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(text = ic, style = TextStyle(fontSize = 14.sp))
-                    }
-                    Column {
-                        Text(text = e.title, style = AriaText.titleMd.copy(fontSize = 14.sp), color = c.textPrimary)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(text = e.body, style = AriaText.bodyMd, color = c.textSecondary)
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        val (bg, fg, ic) = when (e.tone) {
+                            EmergingTone.Accent -> Triple(c.accentSubtle, c.accentMain, "🔥")
+                            EmergingTone.Info -> Triple(c.infoBg, c.info, "✦")
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(bg),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(text = ic, style = TextStyle(fontSize = 14.sp))
+                        }
+                        Column {
+                            Text(text = e.title, style = AriaText.titleMd.copy(fontSize = 14.sp), color = c.textPrimary)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(text = e.body, style = AriaText.bodyMd, color = c.textSecondary)
+                        }
                     }
                 }
             }
         }
-    }
     }
 }
 
@@ -473,66 +488,65 @@ private fun AiTab(state: AnaliseUiState) {
                     color = c.textTertiary,
                 )
             } else {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                state.aiPredictions.forEach { pred ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(c.bgSecondary)
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        val accentColor = when (pred.accentColor) {
-                            AiAccentColor.Success -> c.success
-                            AiAccentColor.Accent -> c.accentMain
-                            AiAccentColor.Info -> c.info
-                        }
-                        Box(
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    state.aiPredictions.forEach { pred ->
+                        Row(
                             modifier = Modifier
-                                .width(4.dp)
-                                .fillMaxHeight()
-                                .clip(RoundedCornerShape(2.dp))
-                                .background(accentColor)
-                        )
-                        Text(text = pred.title, style = AriaText.bodyMd, color = c.textPrimary)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(c.bgSecondary)
+                                .padding(12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            val accentColor = when (pred.accentColor) {
+                                AiAccentColor.Success -> c.success
+                                AiAccentColor.Accent -> c.accentMain
+                                AiAccentColor.Info -> c.info
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .width(4.dp)
+                                    .fillMaxHeight()
+                                    .clip(RoundedCornerShape(2.dp))
+                                    .background(accentColor)
+                            )
+                            Text(text = pred.title, style = AriaText.bodyMd, color = c.textPrimary)
+                        }
                     }
                 }
-            }
             }
         }
     }
 
     if (state.aiRecommendations.isNotEmpty()) {
-    AriaSectionTitle(text = stringResource(R.string.analyses_recommendations))
-    AriaCard(padding = 4.dp) {
-        Column {
-            state.aiRecommendations.forEachIndexed { i, r ->
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    Box(
-                        modifier = Modifier.size(32.dp).clip(RoundedCornerShape(8.dp)).background(c.primarySubtle),
-                        contentAlignment = Alignment.Center,
+        AriaSectionTitle(text = stringResource(R.string.analyses_recommendations))
+        AriaCard(padding = 4.dp) {
+            Column {
+                state.aiRecommendations.forEachIndexed { i, r ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.TrendingUp,
-                            contentDescription = null,
-                            tint = c.primaryMain,
-                            modifier = Modifier.size(18.dp),
-                        )
+                        Box(
+                            modifier = Modifier.size(32.dp).clip(RoundedCornerShape(8.dp)).background(c.primarySubtle),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.TrendingUp,
+                                contentDescription = null,
+                                tint = c.primaryMain,
+                                modifier = Modifier.size(18.dp),
+                            )
+                        }
+                        Text(text = r.text, style = AriaText.bodyMd, color = c.textPrimary, modifier = Modifier.weight(1f))
                     }
-                    Text(text = r.text, style = AriaText.bodyMd, color = c.textPrimary, modifier = Modifier.weight(1f))
+                    if (i < state.aiRecommendations.lastIndex) AriaHairline()
                 }
-                if (i < state.aiRecommendations.lastIndex) AriaHairline()
             }
         }
-    }
     } else {
         AriaSectionTitle(text = stringResource(R.string.analyses_recommendations))
         AriaSectionEmptyCard(message = stringResource(R.string.state_section_empty_analyses_recommendations))
     }
 }
-
