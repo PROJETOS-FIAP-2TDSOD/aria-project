@@ -47,6 +47,7 @@ data class StrategyRoiSummary(
     val categoria: IdeaCategory,
     val ideasCount: Int,
     val projetosAtivos: Int,
+    val roiCompact: String,
     val roiDeltaPercent: Int,
     val progresso: Float,
 )

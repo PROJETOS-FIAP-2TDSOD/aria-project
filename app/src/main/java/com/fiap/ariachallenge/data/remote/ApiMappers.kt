@@ -339,6 +339,7 @@ fun DashboardEstrategiaRoiDto.toDomain(): StrategyRoiSummary = StrategyRoiSummar
     categoria = IdeaCategory.valueOf(categoria),
     ideasCount = ideasCount,
     projetosAtivos = projetosAtivos,
+    roiCompact = roiCompact,
     roiDeltaPercent = roiDeltaPercent,
     progresso = progresso,
 )

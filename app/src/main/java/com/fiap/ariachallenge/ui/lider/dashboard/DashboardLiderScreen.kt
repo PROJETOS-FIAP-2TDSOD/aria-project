@@ -158,6 +158,10 @@ fun DashboardLiderScreen(
                 }
                 item { AriaSectionEmptyCard(message = stringResource(R.string.state_section_empty_top_projects)) }
             }
+            if (uiState.strategyRoi.isNotEmpty()) {
+                item { Spacer(modifier = Modifier.height(12.dp)) }
+                item { StrategyRoiSection(uiState) }
+            }
             item { Spacer(modifier = Modifier.height(12.dp)) }
             item { FunnelSection(uiState) }
             item { Spacer(modifier = Modifier.height(12.dp)) }
@@ -658,6 +662,55 @@ private fun DonutChart(slices: List<CategoryShare>, centerText: String, centerSu
                 textAlign = TextAlign.Center,
                 maxLines = 2,
             )
+        }
+    }
+}
+
+@Composable
+private fun StrategyRoiSection(state: DashboardLiderUiState) {
+    val c = AriaTheme.colors
+    AriaSectionTitle(
+        text = stringResource(R.string.dashboard_strategy_roi_title),
+        sub = stringResource(R.string.dashboard_strategy_roi_sub),
+    )
+    AriaCard(padding = 16.dp) {
+        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            state.strategyRoi.forEach { s ->
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(text = s.titulo, style = AriaText.bodyMd, color = c.textPrimary)
+                            Text(
+                                text = stringResource(
+                                    R.string.dashboard_strategy_roi_footer,
+                                    s.ideasCount,
+                                    s.projetosAtivos,
+                                ),
+                                style = AriaText.labelMd,
+                                color = c.textTertiary,
+                            )
+                        }
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(
+                                text = s.roiCompact,
+                                color = c.textPrimary,
+                                style = TextStyle(fontFamily = OutfitFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 13.sp),
+                            )
+                            Text(
+                                text = "${if (s.roiDeltaPercent >= 0) "+" else ""}${s.roiDeltaPercent}%",
+                                color = if (s.roiDeltaPercent >= 0) c.success else c.error,
+                                style = AriaText.labelMd,
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    AriaProgressLine(value = s.progresso.coerceIn(0f, 1f), color = c.primaryMain)
+                }
+            }
         }
     }
 }
