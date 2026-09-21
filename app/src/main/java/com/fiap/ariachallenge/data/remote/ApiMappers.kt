@@ -8,6 +8,7 @@ import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationKeyMetricDto
 import com.fiap.ariachallenge.domain.model.OrientationKeyMetric
 import com.fiap.ariachallenge.data.remote.dto.MilestoneInputDto
+import com.fiap.ariachallenge.data.remote.dto.NotificationDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectMilestoneDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectRequestDto
@@ -20,6 +21,8 @@ import com.fiap.ariachallenge.domain.model.ProjectMilestone
 import com.fiap.ariachallenge.domain.model.ProjectTeamMember
 import com.fiap.ariachallenge.domain.model.IdeaCategory
 import com.fiap.ariachallenge.domain.model.IdeaStatus
+import com.fiap.ariachallenge.domain.model.Notification
+import com.fiap.ariachallenge.domain.model.NotificationType
 import com.fiap.ariachallenge.domain.model.Orientation
 import com.fiap.ariachallenge.domain.model.OrientationPriority
 import com.fiap.ariachallenge.domain.model.Project
@@ -265,4 +268,15 @@ fun OrientationDto.toDomain(): Orientation = Orientation(
     progress = progress,
     createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
     expiresAt = expiresAt?.let { LocalDateTime.parse(it, dateTimeFormatter) },
+)
+
+
+fun NotificationDto.toDomain(): Notification = Notification(
+    id = id,
+    title = title,
+    message = message,
+    type = NotificationType.valueOf(type),
+    isRead = isRead,
+    relatedIdeaId = relatedIdeaId,
+    createdAt = LocalDateTime.parse(createdAt, dateTimeFormatter),
 )

@@ -161,3 +161,13 @@ data class KeyMetricInputDto(
     val target: String,
     val progress: Float = 0f,
 )
+
+data class NotificationDto(
+    val id: String,
+    val title: String,
+    val message: String,
+    val type: String,
+    val isRead: Boolean = false,
+    val relatedIdeaId: String? = null,
+    val createdAt: String,
+)

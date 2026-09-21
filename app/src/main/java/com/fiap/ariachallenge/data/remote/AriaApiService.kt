@@ -6,7 +6,7 @@ import com.fiap.ariachallenge.data.remote.dto.IdeaRequestDto
 import com.fiap.ariachallenge.data.remote.dto.IdeaReviewDto
 import com.fiap.ariachallenge.data.remote.dto.LoginRequestDto
 import com.fiap.ariachallenge.data.remote.dto.MessageResponseDto
-import com.fiap.ariachallenge.data.remote.dto.KeyMetricInputDto
+import com.fiap.ariachallenge.data.remote.dto.NotificationDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationDto
 import com.fiap.ariachallenge.data.remote.dto.OrientationRequestDto
 import com.fiap.ariachallenge.data.remote.dto.ProjectDto
@@ -82,4 +82,14 @@ interface AriaApiService {
 
     @DELETE("api/v1/orientations/{id}")
     suspend fun deleteOrientation(@Path("id") id: String)
+
+
+    @GET("api/v1/notifications")
+    suspend fun getNotifications(): List<NotificationDto>
+
+    @PATCH("api/v1/notifications/{id}/read")
+    suspend fun markNotificationAsRead(@Path("id") id: String): NotificationDto
+
+    @PATCH("api/v1/notifications/read-all")
+    suspend fun markAllNotificationsAsRead()
 }
