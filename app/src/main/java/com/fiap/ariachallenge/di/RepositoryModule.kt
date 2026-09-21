@@ -10,7 +10,7 @@ import com.fiap.ariachallenge.data.repository.IdeaRepositoryImpl
 import com.fiap.ariachallenge.data.repository.OrientationRepositoryImpl
 import com.fiap.ariachallenge.data.repository.ProjectRepositoryImpl
 import com.fiap.ariachallenge.data.repository.DashboardRepositoryImpl
-import com.fiap.ariachallenge.data.repository.FakeUserRepository
+import com.fiap.ariachallenge.data.repository.UserRepositoryImpl
 import com.fiap.ariachallenge.domain.repository.IAiRepository
 import com.fiap.ariachallenge.domain.repository.IAuthRepository
 import com.fiap.ariachallenge.domain.repository.IDashboardRepository
@@ -46,7 +46,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindUserRepository(impl: FakeUserRepository): IUserRepository
+    abstract fun bindUserRepository(impl: UserRepositoryImpl): IUserRepository
 
     @Binds
     @Singleton
