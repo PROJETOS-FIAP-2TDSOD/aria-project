@@ -381,6 +381,7 @@ apresentação de entrega (e no README do `aria-backend`).
 ### Dashboard do líder
 
 - **Resumo (submetidas, aprovadas, taxa de conversão, ROI total, top 5 projetos):** vem de `GET /dashboard/summary` e `GET /dashboard/roi-by-project`, com fallback para cálculo local se a API falhar
+- **ROI por estratégia:** seção dedicada consumindo `GET /dashboard/roi-by-strategy`, exibindo retorno de cada orientação estratégica
 - **Distribuição por categoria e série mensal de ROI:** continuam calculadas no cliente (sem endpoint dedicado no backend para isso)
 - **Gráficos:** `InteractiveSparkline`, `DonutChart`, `BarChart` (Canvas Compose)
 
@@ -548,6 +549,11 @@ Em `di/NetworkModule.kt`, ajuste `BASE_URL`:
 - Desenvolvimento local via Genymotion: `http://10.0.3.2:8080/`
 - Desenvolvimento local via AVD padrão: `http://10.0.2.2:8080/`
 - Produção (APK de entrega): `https://aria-backend-p7bk.onrender.com/`
+
+> ⚠️ **Atenção:** o plano gratuito do Render "dorme" após um período de
+> inatividade. A primeira requisição após esse intervalo pode levar até
+> ~1 minuto para responder — isso é esperado, não é um bug do app nem do
+> backend.
 
 ---
 
